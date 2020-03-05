@@ -1,0 +1,15 @@
+<ActorFrame>
+	<children>
+			<BitmapText
+				Text="INVASION OF EARTH IMMINENT!"
+				File="_eurostile normal"
+				OnCommand="x,SCREEN_CENTER_X;y,SCREEN_CENTER_Y-200;zoom,1;glowblink;effectcolor1,#FF0000;effectcolor2,#FFFFFF;effectclock,bgm;effectperiod,0.2;cropright,1;linear,1;cropright,0;sleep,1;linear,0.5;cropright,1"
+			/>
+			<BitmapText
+				Text="PREPARE TO DEFEND!"
+				File="_eurostile normal"
+				OnCommand="x,SCREEN_CENTER_X;y,SCREEN_CENTER_Y-200;zoom,1;glowblink;effectcolor1,#FF0000;effectcolor2,#FFFFFF;effectclock,bgm;effectperiod,0.2;cropright,1;sleep,2.5;linear,1;cropright,0;sleep,1;linear,0.5;cropright,1"
+			/>
+			
+	</children>
+</ActorFrame>

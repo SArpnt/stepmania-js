@@ -1,0 +1,9 @@
+[Sprite]
+Texture=numbers 1x11.png
+
+Frame0000=2
+Delay0000=0.4
+Frame0001=1
+Delay0001=1
+Frame0002=0
+Delay0002=1

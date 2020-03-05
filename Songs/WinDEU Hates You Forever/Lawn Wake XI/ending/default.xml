@@ -1,0 +1,90 @@
+<ActorFrame><children>
+
+	<Layer
+		File="mine/_mine.model"
+		OnCommand="x,SCREEN_CENTER_X-50;y,SCREEN_CENTER_Y+50;sleep,1.2;accelerate,1.2;addx,250;addy,150;decelerate,1.2;addx,-250;addy,-150;accelerate,1.2;addx,250;addy,-250;decelerate,1.2;addx,-250;addy,250;accelerate,1.2;addx,250;addy,150;decelerate,1.2;addx,-250;addy,-150;accelerate,1.2;addx,250;addy,-250;decelerate,1.2;addx,-250;addy,250;accelerate,1.2;addx,250;addy,-250;decelerate,1.2;addx,-250;addy,250;accelerate,1.2;addx,250;addy,150"
+	/>
+	<Layer
+		File="mine/_mine.model"
+		OnCommand="x,SCREEN_CENTER_X+50;y,SCREEN_CENTER_Y+50;sleep,1.2;accelerate,1.2;addx,150;addy,-250;decelerate,1.2;addx,-150;addy,250;accelerate,1.2;addx,-250;addy,-250;decelerate,1.2;addx,250;addy,250;accelerate,1.2;addx,-250;addy,-250;decelerate,1.2;addx,250;addy,250;accelerate,1.2;addx,150;addy,150;decelerate,1.2;addx,-150;addy,-150;accelerate,1.2;addx,-250;addy,-250;decelerate,1.2;addx,250;addy,250;accelerate,1.2;addx,-250;addy,-250"
+	/>
+	
+	<ActorFrame OnCommand="x,SCREEN_CENTER_X-200;y,SCREEN_CENTER_Y-200;rotationz,90;sleep,2.4;linear,2.4;addx,400;linear,2.4;addy,400;linear,2.4;addx,-400;linear,2.4;addy,-400;linear,2.4;addx,400"><children>
+		<Sprite
+			Texture="receptor 4x1.png"
+			Frame0000="0"
+			Delay0000="0.95"
+			Frame0001="1"
+			Delay0001="1"
+			Frame0002="2"
+			Delay0002="1"
+			Frame0003="3"
+			Delay0003="1"
+			Frame0004="0"
+			Delay0004="0.05"
+			InitCommand="EffectClock,beat;DiffuseRamp;EffectColor1,0.4,0.4,0.4,1;EffectColor2,1,1,1,1,1;effectperiod,0.5;EffectDelay,0.5;sleep,24.75;diffusealpha,0"
+		/>
+	</children></ActorFrame>
+	
+	<ActorFrame OnCommand="x,SCREEN_CENTER_X-200;y,SCREEN_CENTER_Y+200;sleep,2.4;linear,2.4;addy,-400;linear,2.4;addx,400;linear,2.4;addy,400;linear,2.4;addx,-400;linear,2.4;addy,-400"><children>
+	<Sprite
+		Texture="receptor 4x1.png"
+		Frame0000="0"
+		Delay0000="0.95"
+		Frame0001="1"
+		Delay0001="1"
+		Frame0002="2"
+		Delay0002="1"
+		Frame0003="3"
+		Delay0003="1"
+		Frame0004="0"
+		Delay0004="0.05"
+		InitCommand="EffectClock,beat;DiffuseRamp;EffectColor1,0.4,0.4,0.4,1;EffectColor2,1,1,1,1,1;effectperiod,0.5;EffectDelay,0.5;sleep,24.75;diffusealpha,0"
+	/>
+	</children></ActorFrame>
+	
+	<ActorFrame OnCommand="x,SCREEN_CENTER_X+200;y,SCREEN_CENTER_Y-200;rotationz,180;sleep,2.4;linear,2.4;addy,400;linear,2.4;addx,-400;linear,2.4;addy,-400;linear,2.4;addx,400;linear,2.4;addy,400"><children>
+	<Sprite
+		Texture="receptor 4x1.png"
+		Frame0000="0"
+		Delay0000="0.95"
+		Frame0001="1"
+		Delay0001="1"
+		Frame0002="2"
+		Delay0002="1"
+		Frame0003="3"
+		Delay0003="1"
+		Frame0004="0"
+		Delay0004="0.05"
+		InitCommand="EffectClock,beat;DiffuseRamp;EffectColor1,0.4,0.4,0.4,1;EffectColor2,1,1,1,1,1;effectperiod,0.5;EffectDelay,0.5;sleep,24.75;diffusealpha,0"
+	/>
+	</children></ActorFrame>
+	
+	<ActorFrame OnCommand="x,SCREEN_CENTER_X+200;y,SCREEN_CENTER_Y+200;rotationz,270;sleep,2.4;linear,2.4;addx,-400;linear,2.4;addy,-400;linear,2.4;addx,400;linear,2.4;addy,400;linear,2.4;addx,-400"><children>
+	<Sprite
+		Texture="receptor 4x1.png"
+		Frame0000="0"
+		Delay0000="0.95"
+		Frame0001="1"
+		Delay0001="1"
+		Frame0002="2"
+		Delay0002="1"
+		Frame0003="3"
+		Delay0003="1"
+		Frame0004="0"
+		Delay0004="0.05"
+		InitCommand="EffectClock,beat;DiffuseRamp;EffectColor1,0.4,0.4,0.4,1;EffectColor2,1,1,1,1,1;effectperiod,0.5;EffectDelay,0.5;sleep,24.75;diffusealpha,0"
+	/>
+	</children></ActorFrame>
+	
+	<Layer
+		File="4th/4th.model"
+		OnCommand="x,SCREEN_CENTER_X-50;y,SCREEN_CENTER_Y-50;rotationz,90;sleep,1.2;accelerate,1.2;addx,-150;addy,-150;decelerate,1.2;addx,150;addy,150;rotationz,990;accelerate,1.2;addx,-150;addy,250;decelerate,1.2;addx,150;addy,-250;rotationz,0;accelerate,1.2;addx,250;addy,-150;decelerate,1.2;addx,-250;addy,150;rotationz,1170;accelerate,1.2;addx,-150;addy,250;decelerate,1.2;addx,150;addy,-250;rotationz,360;accelerate,1.2;addx,-150;addy,250;decelerate,1.2;addx,150;addy,-250;rotationz,810;accelerate,1.2;addx,250;addy,-150"
+	/>
+	
+	<Layer
+		File="4th/4th.model"
+		OnCommand="x,SCREEN_CENTER_X+50;y,SCREEN_CENTER_Y-50;rotationz,0;sleep,1.2;accelerate,1.2;addx,-250;addy,250;decelerate,1.2;addx,250;addy,-250;rotationz,900;accelerate,1.2;addx,150;addy,250;decelerate,1.2;addx,-150;addy,-250;rotationz,180;accelerate,1.2;addx,-250;addy,250;decelerate,1.2;addx,250;addy,-250;rotationz,900;accelerate,1.2;addx,-250;addy,-150;decelerate,1.2;addx,250;addy,150;rotationz,270;accelerate,1.2;addx,150;addy,250;decelerate,1.2;addx,-150;addy,-250;rotationz,990;accelerate,1.2;addx,-250;addy,250"
+	/>
+		
+</children></ActorFrame>

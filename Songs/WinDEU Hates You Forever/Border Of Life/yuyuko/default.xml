@@ -1,0 +1,33 @@
+<ActorFrame><children>
+
+		<BitmapText
+				Text="Yuyuko: You shouldn't have come to this place."
+				File="_eurostile normal"
+				OnCommand="addx,320;y,SCREEN_TOP+20;zoom,0.9;cropright,1;sleep,3;skewx,-0.175;linear,3;cropright,0;sleep,5;linear,1;diffusealpha,0"
+		/>
+		
+		<BitmapText
+				Text="Now, only death awaits you."
+				File="_eurostile normal"
+				OnCommand="addx,300;y,SCREEN_TOP+45;zoom,0.9;cropright,1;sleep,6;skewx,-0.175;linear,3;cropright,0;sleep,2;linear,1;diffusealpha,0"
+		/>
+		
+		
+		
+		<BitmapText
+				Text="...It has already begun. There is nothing I can do now."
+				File="_eurostile normal"
+				OnCommand="addx,320;y,SCREEN_TOP+20;zoom,0.8;cropright,1;sleep,14;skewx,-0.175;linear,2;cropright,0;sleep,2;linear,1;diffusealpha,0"
+		/>
+		
+		
+		
+		<BitmapText
+				Text="...Goodbye..."
+				File="_eurostile normal"
+				OnCommand="addx,320;y,SCREEN_TOP+20;zoom,0.8;cropright,1;sleep,20.5;skewx,-0.175;linear,3;cropright,0;sleep,1;linear,1.5;diffusealpha,0"
+		/>
+
+		
+		
+</children></ActorFrame>

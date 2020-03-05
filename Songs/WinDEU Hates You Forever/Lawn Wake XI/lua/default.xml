@@ -1,0 +1,757 @@
+<ActorFrame><children>
+
+	<Layer
+		Type="Quad"
+		InitCommand="hidden,1"
+		OnCommand="sleep,1000"
+	/>
+	
+	<Layer
+		Type="Quad"
+		InitCommand="hidden,1"
+		OnCommand="%function(self)
+				fgcurcommand = 1;
+				self:queuecommand('Update');
+			end"
+		
+		UpdateCommand="%function(self)
+			
+			if GAMESTATE:IsCourseMode() or (FUCK_EXE and tonumber(GAMESTATE:GetVersionDate())>=20170210) then
+			
+				if GAMESTATE:GetSongBeat()>=0 and fgcurcommand == 1 then
+					SCREENMAN:GetTopScreen():GetChild('Overlay'):hidden(1);
+					SCREENMAN:GetTopScreen():GetChild('Underlay'):hidden(1);
+					
+					if GAMESTATE:IsHumanPlayer(PLAYER_1) then
+						SCREENMAN:GetTopScreen():GetChild('LifeP1'):hidden(1);
+						
+						SCREENMAN:GetTopScreen():GetChild('ScoreP1'):hidden(1);
+					end
+					if GAMESTATE:IsHumanPlayer(PLAYER_2) then
+						SCREENMAN:GetTopScreen():GetChild('LifeP2'):hidden(1);
+						
+						SCREENMAN:GetTopScreen():GetChild('ScoreP2'):hidden(1);
+					end
+					
+					fgcurcommand = fgcurcommand + 1;
+				end
+				
+				if GAMESTATE:GetSongBeat()>=8 and fgcurcommand == 2 then
+					if GAMESTATE:IsHumanPlayer(PLAYER_1) then
+						SCREENMAN:GetTopScreen():GetChild('LifeP1'):hidden(0);
+						
+						P1x=SCREENMAN:GetTopScreen():GetChild('PlayerP1'):GetX();
+						P1y=SCREENMAN:GetTopScreen():GetChild('PlayerP1'):GetY();
+						P1zoom=SCREENMAN:GetTopScreen():GetChild('PlayerP1'):GetZoom();
+						
+						LifeP1x=SCREENMAN:GetTopScreen():GetChild('LifeP1'):GetX();
+						LifeP1y=SCREENMAN:GetTopScreen():GetChild('LifeP1'):GetY();
+						LifeP1zoom=SCREENMAN:GetTopScreen():GetChild('LifeP1'):GetZoom();
+						
+						ScoreP1x=SCREENMAN:GetTopScreen():GetChild('ScoreP1'):GetX();
+						ScoreP1y=SCREENMAN:GetTopScreen():GetChild('ScoreP1'):GetY();
+						ScoreP1zoom=SCREENMAN:GetTopScreen():GetChild('ScoreP1'):GetZoom();
+					end
+					if GAMESTATE:IsHumanPlayer(PLAYER_2) then
+						SCREENMAN:GetTopScreen():GetChild('LifeP2'):hidden(0);
+						
+						P2x=SCREENMAN:GetTopScreen():GetChild('PlayerP2'):GetX();
+						P2y=SCREENMAN:GetTopScreen():GetChild('PlayerP2'):GetY();
+						P2zoom=SCREENMAN:GetTopScreen():GetChild('PlayerP2'):GetZoom();
+						
+						LifeP2x=SCREENMAN:GetTopScreen():GetChild('LifeP2'):GetX();
+						LifeP2y=SCREENMAN:GetTopScreen():GetChild('LifeP2'):GetY();
+						LifeP2zoom=SCREENMAN:GetTopScreen():GetChild('LifeP2'):GetZoom();
+						
+						ScoreP2x=SCREENMAN:GetTopScreen():GetChild('ScoreP2'):GetX();
+						ScoreP2y=SCREENMAN:GetTopScreen():GetChild('ScoreP2'):GetY();
+						ScoreP2zoom=SCREENMAN:GetTopScreen():GetChild('ScoreP2'):GetZoom();
+					end
+					
+					fgcurcommand = fgcurcommand + 1;
+				end
+				
+				
+				
+				if GAMESTATE:GetSongBeat()>=16 and fgcurcommand == 3 then
+					if GAMESTATE:IsHumanPlayer(PLAYER_1) then
+						SCREENMAN:GetTopScreen():GetChild('ScoreP1'):hidden(0);
+					end
+					if GAMESTATE:IsHumanPlayer(PLAYER_2) then
+						SCREENMAN:GetTopScreen():GetChild('ScoreP2'):hidden(0);
+					end
+					
+					fgcurcommand = fgcurcommand + 1;
+				end
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				if GAMESTATE:GetSongBeat()>=188 and fgcurcommand == 4 then
+					if GAMESTATE:IsHumanPlayer(PLAYER_1) then
+						SCREENMAN:GetTopScreen():GetChild('PlayerP1'):accelerate(1.2);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP1'):x((SCREEN_CENTER_X-(SCREEN_CENTER_X*0.35))+(P1x*0.35));
+						SCREENMAN:GetTopScreen():GetChild('PlayerP1'):y((SCREEN_CENTER_Y-(SCREEN_CENTER_Y*0.35))+(P1y*0.35));
+						SCREENMAN:GetTopScreen():GetChild('PlayerP1'):zoom(P1zoom*0.35);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP1'):linear(1.3);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP1'):addx(130);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP1'):addy(-65);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP1'):linear(0.75);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP1'):addx(-75);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP1'):addy(-38);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP1'):linear(1.82);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP1'):addx(-182);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP1'):addy(91);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP1'):linear(2);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP1'):addx(230);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP1'):addy(115);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP1'):linear(0.28);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP1'):addx(28);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP1'):addy(-14);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP1'):linear(2.6);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP1'):addx(-260);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP1'):addy(-130);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP1'):linear(1.24);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP1'):addx(124);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP1'):addy(-62);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP1'):linear(1.36);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP1'):addx(136);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP1'):addy(68);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP1'):linear(2.6);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP1'):addx(-260);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP1'):addy(130);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP1'):linear(0.12);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP1'):addx(16);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP1'):addy(8);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP1'):linear(2.44);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP1'):addx(244);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP1'):addy(-122);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP1'):linear(1.68);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP1'):addx(-168);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP1'):addy(-84);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP1'):linear(0.92);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP1'):addx(-92);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP1'):addy(46);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP1'):linear(2.6);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP1'):addx(260);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP1'):addy(130);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP1'):linear(0.6);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP1'):addx(-60);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP1'):addy(30);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP1'):linear(2);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP1'):addx(-200);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP1'):addy(-100);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP1'):linear(2.1);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP1'):addx(210);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP1'):addy(-105);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP1'):linear(0.5);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP1'):addx(50);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP1'):addy(25);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP1'):linear(2.6);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP1'):addx(-260);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP1'):addy(130);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP1'):linear(1);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP1'):addx(100);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP1'):addy(50);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP1'):linear(1.6);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP1'):addx(160);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP1'):addy(-80);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP1'):linear(2.5);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP1'):addx(-250);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP1'):addy(-125);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP1'):linear(0.1);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP1'):addx(-10);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP1'):addy(5);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP1'):linear(2.6);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP1'):addx(260);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP1'):addy(130);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP1'):linear(1.44);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP1'):addx(-142);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP1'):addy(71);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP1'):linear(1.18);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP1'):addx(-118);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP1'):addy(-59);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP1'):linear(2.6);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP1'):addx(260);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP1'):addy(-130);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP1'):linear(0.36);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP1'):addx(-36);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP1'):addy(-18);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP1'):linear(2.24);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP1'):addx(-224);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP1'):addy(112);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP1'):linear(0.44);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP1'):addx(44);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP1'):addy(22);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP1'):decelerate(1.2);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP1'):zoom(P1zoom);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP1'):x(P1x);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP1'):y(P1y);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP1'):rotationy(1440);
+						
+						SCREENMAN:GetTopScreen():GetChild('LifeP1'):accelerate(1.2);
+						SCREENMAN:GetTopScreen():GetChild('LifeP1'):x((SCREEN_CENTER_X-(SCREEN_CENTER_X*0.35))+(LifeP1x*0.35));
+						SCREENMAN:GetTopScreen():GetChild('LifeP1'):y((SCREEN_CENTER_Y-(SCREEN_CENTER_Y*0.35))+(LifeP1y*0.35));
+						SCREENMAN:GetTopScreen():GetChild('LifeP1'):zoom(LifeP1zoom*0.35);
+						SCREENMAN:GetTopScreen():GetChild('LifeP1'):linear(1.3);
+						SCREENMAN:GetTopScreen():GetChild('LifeP1'):addx(130);
+						SCREENMAN:GetTopScreen():GetChild('LifeP1'):addy(-65);
+						SCREENMAN:GetTopScreen():GetChild('LifeP1'):linear(0.75);
+						SCREENMAN:GetTopScreen():GetChild('LifeP1'):addx(-75);
+						SCREENMAN:GetTopScreen():GetChild('LifeP1'):addy(-38);
+						SCREENMAN:GetTopScreen():GetChild('LifeP1'):linear(1.82);
+						SCREENMAN:GetTopScreen():GetChild('LifeP1'):addx(-182);
+						SCREENMAN:GetTopScreen():GetChild('LifeP1'):addy(91);
+						SCREENMAN:GetTopScreen():GetChild('LifeP1'):linear(2);
+						SCREENMAN:GetTopScreen():GetChild('LifeP1'):addx(230);
+						SCREENMAN:GetTopScreen():GetChild('LifeP1'):addy(115);
+						SCREENMAN:GetTopScreen():GetChild('LifeP1'):linear(0.28);
+						SCREENMAN:GetTopScreen():GetChild('LifeP1'):addx(28);
+						SCREENMAN:GetTopScreen():GetChild('LifeP1'):addy(-14);
+						SCREENMAN:GetTopScreen():GetChild('LifeP1'):linear(2.6);
+						SCREENMAN:GetTopScreen():GetChild('LifeP1'):addx(-260);
+						SCREENMAN:GetTopScreen():GetChild('LifeP1'):addy(-130);
+						SCREENMAN:GetTopScreen():GetChild('LifeP1'):linear(1.24);
+						SCREENMAN:GetTopScreen():GetChild('LifeP1'):addx(124);
+						SCREENMAN:GetTopScreen():GetChild('LifeP1'):addy(-62);
+						SCREENMAN:GetTopScreen():GetChild('LifeP1'):linear(1.36);
+						SCREENMAN:GetTopScreen():GetChild('LifeP1'):addx(136);
+						SCREENMAN:GetTopScreen():GetChild('LifeP1'):addy(68);
+						SCREENMAN:GetTopScreen():GetChild('LifeP1'):linear(2.6);
+						SCREENMAN:GetTopScreen():GetChild('LifeP1'):addx(-260);
+						SCREENMAN:GetTopScreen():GetChild('LifeP1'):addy(130);
+						SCREENMAN:GetTopScreen():GetChild('LifeP1'):linear(0.12);
+						SCREENMAN:GetTopScreen():GetChild('LifeP1'):addx(16);
+						SCREENMAN:GetTopScreen():GetChild('LifeP1'):addy(8);
+						SCREENMAN:GetTopScreen():GetChild('LifeP1'):linear(2.44);
+						SCREENMAN:GetTopScreen():GetChild('LifeP1'):addx(244);
+						SCREENMAN:GetTopScreen():GetChild('LifeP1'):addy(-122);
+						SCREENMAN:GetTopScreen():GetChild('LifeP1'):linear(1.68);
+						SCREENMAN:GetTopScreen():GetChild('LifeP1'):addx(-168);
+						SCREENMAN:GetTopScreen():GetChild('LifeP1'):addy(-84);
+						SCREENMAN:GetTopScreen():GetChild('LifeP1'):linear(0.92);
+						SCREENMAN:GetTopScreen():GetChild('LifeP1'):addx(-92);
+						SCREENMAN:GetTopScreen():GetChild('LifeP1'):addy(46);
+						SCREENMAN:GetTopScreen():GetChild('LifeP1'):linear(2.6);
+						SCREENMAN:GetTopScreen():GetChild('LifeP1'):addx(260);
+						SCREENMAN:GetTopScreen():GetChild('LifeP1'):addy(130);
+						SCREENMAN:GetTopScreen():GetChild('LifeP1'):linear(0.6);
+						SCREENMAN:GetTopScreen():GetChild('LifeP1'):addx(-60);
+						SCREENMAN:GetTopScreen():GetChild('LifeP1'):addy(30);
+						SCREENMAN:GetTopScreen():GetChild('LifeP1'):linear(2);
+						SCREENMAN:GetTopScreen():GetChild('LifeP1'):addx(-200);
+						SCREENMAN:GetTopScreen():GetChild('LifeP1'):addy(-100);
+						SCREENMAN:GetTopScreen():GetChild('LifeP1'):linear(2.1);
+						SCREENMAN:GetTopScreen():GetChild('LifeP1'):addx(210);
+						SCREENMAN:GetTopScreen():GetChild('LifeP1'):addy(-105);
+						SCREENMAN:GetTopScreen():GetChild('LifeP1'):linear(0.5);
+						SCREENMAN:GetTopScreen():GetChild('LifeP1'):addx(50);
+						SCREENMAN:GetTopScreen():GetChild('LifeP1'):addy(25);
+						SCREENMAN:GetTopScreen():GetChild('LifeP1'):linear(2.6);
+						SCREENMAN:GetTopScreen():GetChild('LifeP1'):addx(-260);
+						SCREENMAN:GetTopScreen():GetChild('LifeP1'):addy(130);
+						SCREENMAN:GetTopScreen():GetChild('LifeP1'):linear(1);
+						SCREENMAN:GetTopScreen():GetChild('LifeP1'):addx(100);
+						SCREENMAN:GetTopScreen():GetChild('LifeP1'):addy(50);
+						SCREENMAN:GetTopScreen():GetChild('LifeP1'):linear(1.6);
+						SCREENMAN:GetTopScreen():GetChild('LifeP1'):addx(160);
+						SCREENMAN:GetTopScreen():GetChild('LifeP1'):addy(-80);
+						SCREENMAN:GetTopScreen():GetChild('LifeP1'):linear(2.5);
+						SCREENMAN:GetTopScreen():GetChild('LifeP1'):addx(-250);
+						SCREENMAN:GetTopScreen():GetChild('LifeP1'):addy(-125);
+						SCREENMAN:GetTopScreen():GetChild('LifeP1'):linear(0.1);
+						SCREENMAN:GetTopScreen():GetChild('LifeP1'):addx(-10);
+						SCREENMAN:GetTopScreen():GetChild('LifeP1'):addy(5);
+						SCREENMAN:GetTopScreen():GetChild('LifeP1'):linear(2.6);
+						SCREENMAN:GetTopScreen():GetChild('LifeP1'):addx(260);
+						SCREENMAN:GetTopScreen():GetChild('LifeP1'):addy(130);
+						SCREENMAN:GetTopScreen():GetChild('LifeP1'):linear(1.44);
+						SCREENMAN:GetTopScreen():GetChild('LifeP1'):addx(-142);
+						SCREENMAN:GetTopScreen():GetChild('LifeP1'):addy(71);
+						SCREENMAN:GetTopScreen():GetChild('LifeP1'):linear(1.18);
+						SCREENMAN:GetTopScreen():GetChild('LifeP1'):addx(-118);
+						SCREENMAN:GetTopScreen():GetChild('LifeP1'):addy(-59);
+						SCREENMAN:GetTopScreen():GetChild('LifeP1'):linear(2.6);
+						SCREENMAN:GetTopScreen():GetChild('LifeP1'):addx(260);
+						SCREENMAN:GetTopScreen():GetChild('LifeP1'):addy(-130);
+						SCREENMAN:GetTopScreen():GetChild('LifeP1'):linear(0.36);
+						SCREENMAN:GetTopScreen():GetChild('LifeP1'):addx(-36);
+						SCREENMAN:GetTopScreen():GetChild('LifeP1'):addy(-18);
+						SCREENMAN:GetTopScreen():GetChild('LifeP1'):linear(2.24);
+						SCREENMAN:GetTopScreen():GetChild('LifeP1'):addx(-224);
+						SCREENMAN:GetTopScreen():GetChild('LifeP1'):addy(112);
+						SCREENMAN:GetTopScreen():GetChild('LifeP1'):linear(0.44);
+						SCREENMAN:GetTopScreen():GetChild('LifeP1'):addx(44);
+						SCREENMAN:GetTopScreen():GetChild('LifeP1'):addy(22);
+						SCREENMAN:GetTopScreen():GetChild('LifeP1'):decelerate(1.2);
+						SCREENMAN:GetTopScreen():GetChild('LifeP1'):zoom(LifeP1zoom);
+						SCREENMAN:GetTopScreen():GetChild('LifeP1'):x(LifeP1x);
+						SCREENMAN:GetTopScreen():GetChild('LifeP1'):y(LifeP1y);
+						
+						SCREENMAN:GetTopScreen():GetChild('ScoreP1'):accelerate(1.2);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP1'):x((SCREEN_CENTER_X-(SCREEN_CENTER_X*0.35))+(ScoreP1x*0.35));
+						SCREENMAN:GetTopScreen():GetChild('ScoreP1'):y((SCREEN_CENTER_Y-(SCREEN_CENTER_Y*0.35))+(ScoreP1y*0.35));
+						SCREENMAN:GetTopScreen():GetChild('ScoreP1'):zoom(ScoreP1zoom*0.35);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP1'):linear(1.3);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP1'):addx(130);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP1'):addy(-65);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP1'):linear(0.75);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP1'):addx(-75);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP1'):addy(-38);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP1'):linear(1.82);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP1'):addx(-182);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP1'):addy(91);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP1'):linear(2);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP1'):addx(230);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP1'):addy(115);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP1'):linear(0.28);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP1'):addx(28);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP1'):addy(-14);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP1'):linear(2.6);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP1'):addx(-260);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP1'):addy(-130);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP1'):linear(1.24);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP1'):addx(124);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP1'):addy(-62);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP1'):linear(1.36);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP1'):addx(136);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP1'):addy(68);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP1'):linear(2.6);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP1'):addx(-260);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP1'):addy(130);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP1'):linear(0.12);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP1'):addx(16);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP1'):addy(8);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP1'):linear(2.44);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP1'):addx(244);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP1'):addy(-122);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP1'):linear(1.68);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP1'):addx(-168);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP1'):addy(-84);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP1'):linear(0.92);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP1'):addx(-92);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP1'):addy(46);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP1'):linear(2.6);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP1'):addx(260);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP1'):addy(130);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP1'):linear(0.6);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP1'):addx(-60);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP1'):addy(30);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP1'):linear(2);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP1'):addx(-200);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP1'):addy(-100);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP1'):linear(2.1);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP1'):addx(210);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP1'):addy(-105);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP1'):linear(0.5);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP1'):addx(50);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP1'):addy(25);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP1'):linear(2.6);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP1'):addx(-260);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP1'):addy(130);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP1'):linear(1);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP1'):addx(100);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP1'):addy(50);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP1'):linear(1.6);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP1'):addx(160);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP1'):addy(-80);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP1'):linear(2.5);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP1'):addx(-250);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP1'):addy(-125);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP1'):linear(0.1);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP1'):addx(-10);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP1'):addy(5);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP1'):linear(2.6);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP1'):addx(260);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP1'):addy(130);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP1'):linear(1.44);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP1'):addx(-142);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP1'):addy(71);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP1'):linear(1.18);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP1'):addx(-118);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP1'):addy(-59);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP1'):linear(2.6);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP1'):addx(260);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP1'):addy(-130);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP1'):linear(0.36);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP1'):addx(-36);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP1'):addy(-18);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP1'):linear(2.24);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP1'):addx(-224);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP1'):addy(112);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP1'):linear(0.44);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP1'):addx(44);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP1'):addy(22);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP1'):decelerate(1.2);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP1'):zoom(ScoreP1zoom);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP1'):x(ScoreP1x);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP1'):y(ScoreP1y);
+					end
+					if GAMESTATE:IsHumanPlayer(PLAYER_2) then
+						SCREENMAN:GetTopScreen():GetChild('PlayerP2'):accelerate(1.2);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP2'):x((SCREEN_CENTER_X-(SCREEN_CENTER_X*0.35))+(P2x*0.35));
+						SCREENMAN:GetTopScreen():GetChild('PlayerP2'):y((SCREEN_CENTER_Y-(SCREEN_CENTER_Y*0.35))+(P2y*0.35));
+						SCREENMAN:GetTopScreen():GetChild('PlayerP2'):zoom(P2zoom*0.35);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP2'):linear(1.3);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP2'):addx(130);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP2'):addy(-65);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP2'):linear(0.75);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP2'):addx(-75);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP2'):addy(-38);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP2'):linear(1.82);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP2'):addx(-182);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP2'):addy(91);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP2'):linear(2);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP2'):addx(230);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP2'):addy(115);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP2'):linear(0.28);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP2'):addx(28);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP2'):addy(-14);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP2'):linear(2.6);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP2'):addx(-260);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP2'):addy(-130);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP2'):linear(1.24);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP2'):addx(124);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP2'):addy(-62);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP2'):linear(1.36);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP2'):addx(136);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP2'):addy(68);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP2'):linear(2.6);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP2'):addx(-260);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP2'):addy(130);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP2'):linear(0.12);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP2'):addx(16);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP2'):addy(8);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP2'):linear(2.44);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP2'):addx(244);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP2'):addy(-122);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP2'):linear(1.68);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP2'):addx(-168);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP2'):addy(-84);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP2'):linear(0.92);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP2'):addx(-92);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP2'):addy(46);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP2'):linear(2.6);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP2'):addx(260);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP2'):addy(130);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP2'):linear(0.6);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP2'):addx(-60);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP2'):addy(30);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP2'):linear(2);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP2'):addx(-200);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP2'):addy(-100);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP2'):linear(2.1);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP2'):addx(210);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP2'):addy(-105);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP2'):linear(0.5);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP2'):addx(50);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP2'):addy(25);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP2'):linear(2.6);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP2'):addx(-260);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP2'):addy(130);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP2'):linear(1);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP2'):addx(100);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP2'):addy(50);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP2'):linear(1.6);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP2'):addx(160);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP2'):addy(-80);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP2'):linear(2.5);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP2'):addx(-250);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP2'):addy(-125);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP2'):linear(0.1);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP2'):addx(-10);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP2'):addy(5);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP2'):linear(2.6);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP2'):addx(260);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP2'):addy(130);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP2'):linear(1.44);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP2'):addx(-142);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP2'):addy(71);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP2'):linear(1.18);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP2'):addx(-118);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP2'):addy(-59);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP2'):linear(2.6);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP2'):addx(260);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP2'):addy(-130);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP2'):linear(0.36);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP2'):addx(-36);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP2'):addy(-18);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP2'):linear(2.24);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP2'):addx(-224);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP2'):addy(112);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP2'):linear(0.44);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP2'):addx(44);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP2'):addy(22);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP2'):decelerate(1.2);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP2'):zoom(P2zoom);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP2'):x(P2x);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP2'):y(P2y);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP2'):rotationy(1440);
+						
+						SCREENMAN:GetTopScreen():GetChild('LifeP2'):accelerate(1.2);
+						SCREENMAN:GetTopScreen():GetChild('LifeP2'):x((SCREEN_CENTER_X-(SCREEN_CENTER_X*0.35))+(LifeP2x*0.35));
+						SCREENMAN:GetTopScreen():GetChild('LifeP2'):y((SCREEN_CENTER_Y-(SCREEN_CENTER_Y*0.35))+(LifeP2y*0.35));
+						SCREENMAN:GetTopScreen():GetChild('LifeP2'):zoom(LifeP2zoom*0.35);
+						SCREENMAN:GetTopScreen():GetChild('LifeP2'):linear(1.3);
+						SCREENMAN:GetTopScreen():GetChild('LifeP2'):addx(130);
+						SCREENMAN:GetTopScreen():GetChild('LifeP2'):addy(-65);
+						SCREENMAN:GetTopScreen():GetChild('LifeP2'):linear(0.75);
+						SCREENMAN:GetTopScreen():GetChild('LifeP2'):addx(-75);
+						SCREENMAN:GetTopScreen():GetChild('LifeP2'):addy(-38);
+						SCREENMAN:GetTopScreen():GetChild('LifeP2'):linear(1.82);
+						SCREENMAN:GetTopScreen():GetChild('LifeP2'):addx(-182);
+						SCREENMAN:GetTopScreen():GetChild('LifeP2'):addy(91);
+						SCREENMAN:GetTopScreen():GetChild('LifeP2'):linear(2);
+						SCREENMAN:GetTopScreen():GetChild('LifeP2'):addx(230);
+						SCREENMAN:GetTopScreen():GetChild('LifeP2'):addy(115);
+						SCREENMAN:GetTopScreen():GetChild('LifeP2'):linear(0.28);
+						SCREENMAN:GetTopScreen():GetChild('LifeP2'):addx(28);
+						SCREENMAN:GetTopScreen():GetChild('LifeP2'):addy(-14);
+						SCREENMAN:GetTopScreen():GetChild('LifeP2'):linear(2.6);
+						SCREENMAN:GetTopScreen():GetChild('LifeP2'):addx(-260);
+						SCREENMAN:GetTopScreen():GetChild('LifeP2'):addy(-130);
+						SCREENMAN:GetTopScreen():GetChild('LifeP2'):linear(1.24);
+						SCREENMAN:GetTopScreen():GetChild('LifeP2'):addx(124);
+						SCREENMAN:GetTopScreen():GetChild('LifeP2'):addy(-62);
+						SCREENMAN:GetTopScreen():GetChild('LifeP2'):linear(1.36);
+						SCREENMAN:GetTopScreen():GetChild('LifeP2'):addx(136);
+						SCREENMAN:GetTopScreen():GetChild('LifeP2'):addy(68);
+						SCREENMAN:GetTopScreen():GetChild('LifeP2'):linear(2.6);
+						SCREENMAN:GetTopScreen():GetChild('LifeP2'):addx(-260);
+						SCREENMAN:GetTopScreen():GetChild('LifeP2'):addy(130);
+						SCREENMAN:GetTopScreen():GetChild('LifeP2'):linear(0.12);
+						SCREENMAN:GetTopScreen():GetChild('LifeP2'):addx(16);
+						SCREENMAN:GetTopScreen():GetChild('LifeP2'):addy(8);
+						SCREENMAN:GetTopScreen():GetChild('LifeP2'):linear(2.44);
+						SCREENMAN:GetTopScreen():GetChild('LifeP2'):addx(244);
+						SCREENMAN:GetTopScreen():GetChild('LifeP2'):addy(-122);
+						SCREENMAN:GetTopScreen():GetChild('LifeP2'):linear(1.68);
+						SCREENMAN:GetTopScreen():GetChild('LifeP2'):addx(-168);
+						SCREENMAN:GetTopScreen():GetChild('LifeP2'):addy(-84);
+						SCREENMAN:GetTopScreen():GetChild('LifeP2'):linear(0.92);
+						SCREENMAN:GetTopScreen():GetChild('LifeP2'):addx(-92);
+						SCREENMAN:GetTopScreen():GetChild('LifeP2'):addy(46);
+						SCREENMAN:GetTopScreen():GetChild('LifeP2'):linear(2.6);
+						SCREENMAN:GetTopScreen():GetChild('LifeP2'):addx(260);
+						SCREENMAN:GetTopScreen():GetChild('LifeP2'):addy(130);
+						SCREENMAN:GetTopScreen():GetChild('LifeP2'):linear(0.6);
+						SCREENMAN:GetTopScreen():GetChild('LifeP2'):addx(-60);
+						SCREENMAN:GetTopScreen():GetChild('LifeP2'):addy(30);
+						SCREENMAN:GetTopScreen():GetChild('LifeP2'):linear(2);
+						SCREENMAN:GetTopScreen():GetChild('LifeP2'):addx(-200);
+						SCREENMAN:GetTopScreen():GetChild('LifeP2'):addy(-100);
+						SCREENMAN:GetTopScreen():GetChild('LifeP2'):linear(2.1);
+						SCREENMAN:GetTopScreen():GetChild('LifeP2'):addx(210);
+						SCREENMAN:GetTopScreen():GetChild('LifeP2'):addy(-105);
+						SCREENMAN:GetTopScreen():GetChild('LifeP2'):linear(0.5);
+						SCREENMAN:GetTopScreen():GetChild('LifeP2'):addx(50);
+						SCREENMAN:GetTopScreen():GetChild('LifeP2'):addy(25);
+						SCREENMAN:GetTopScreen():GetChild('LifeP2'):linear(2.6);
+						SCREENMAN:GetTopScreen():GetChild('LifeP2'):addx(-260);
+						SCREENMAN:GetTopScreen():GetChild('LifeP2'):addy(130);
+						SCREENMAN:GetTopScreen():GetChild('LifeP2'):linear(1);
+						SCREENMAN:GetTopScreen():GetChild('LifeP2'):addx(100);
+						SCREENMAN:GetTopScreen():GetChild('LifeP2'):addy(50);
+						SCREENMAN:GetTopScreen():GetChild('LifeP2'):linear(1.6);
+						SCREENMAN:GetTopScreen():GetChild('LifeP2'):addx(160);
+						SCREENMAN:GetTopScreen():GetChild('LifeP2'):addy(-80);
+						SCREENMAN:GetTopScreen():GetChild('LifeP2'):linear(2.5);
+						SCREENMAN:GetTopScreen():GetChild('LifeP2'):addx(-250);
+						SCREENMAN:GetTopScreen():GetChild('LifeP2'):addy(-125);
+						SCREENMAN:GetTopScreen():GetChild('LifeP2'):linear(0.1);
+						SCREENMAN:GetTopScreen():GetChild('LifeP2'):addx(-10);
+						SCREENMAN:GetTopScreen():GetChild('LifeP2'):addy(5);
+						SCREENMAN:GetTopScreen():GetChild('LifeP2'):linear(2.6);
+						SCREENMAN:GetTopScreen():GetChild('LifeP2'):addx(260);
+						SCREENMAN:GetTopScreen():GetChild('LifeP2'):addy(130);
+						SCREENMAN:GetTopScreen():GetChild('LifeP2'):linear(1.44);
+						SCREENMAN:GetTopScreen():GetChild('LifeP2'):addx(-142);
+						SCREENMAN:GetTopScreen():GetChild('LifeP2'):addy(71);
+						SCREENMAN:GetTopScreen():GetChild('LifeP2'):linear(1.18);
+						SCREENMAN:GetTopScreen():GetChild('LifeP2'):addx(-118);
+						SCREENMAN:GetTopScreen():GetChild('LifeP2'):addy(-59);
+						SCREENMAN:GetTopScreen():GetChild('LifeP2'):linear(2.6);
+						SCREENMAN:GetTopScreen():GetChild('LifeP2'):addx(260);
+						SCREENMAN:GetTopScreen():GetChild('LifeP2'):addy(-130);
+						SCREENMAN:GetTopScreen():GetChild('LifeP2'):linear(0.36);
+						SCREENMAN:GetTopScreen():GetChild('LifeP2'):addx(-36);
+						SCREENMAN:GetTopScreen():GetChild('LifeP2'):addy(-18);
+						SCREENMAN:GetTopScreen():GetChild('LifeP2'):linear(2.24);
+						SCREENMAN:GetTopScreen():GetChild('LifeP2'):addx(-224);
+						SCREENMAN:GetTopScreen():GetChild('LifeP2'):addy(112);
+						SCREENMAN:GetTopScreen():GetChild('LifeP2'):linear(0.44);
+						SCREENMAN:GetTopScreen():GetChild('LifeP2'):addx(44);
+						SCREENMAN:GetTopScreen():GetChild('LifeP2'):addy(22);
+						SCREENMAN:GetTopScreen():GetChild('LifeP2'):decelerate(1.2);
+						SCREENMAN:GetTopScreen():GetChild('LifeP2'):zoom(LifeP2zoom);
+						SCREENMAN:GetTopScreen():GetChild('LifeP2'):x(LifeP2x);
+						SCREENMAN:GetTopScreen():GetChild('LifeP2'):y(LifeP2y);
+						
+						SCREENMAN:GetTopScreen():GetChild('ScoreP2'):accelerate(1.2);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP2'):x((SCREEN_CENTER_X-(SCREEN_CENTER_X*0.35))+(ScoreP2x*0.35));
+						SCREENMAN:GetTopScreen():GetChild('ScoreP2'):y((SCREEN_CENTER_Y-(SCREEN_CENTER_Y*0.35))+(ScoreP2y*0.35));
+						SCREENMAN:GetTopScreen():GetChild('ScoreP2'):zoom(ScoreP2zoom*0.35);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP2'):linear(1.3);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP2'):addx(130);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP2'):addy(-65);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP2'):linear(0.75);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP2'):addx(-75);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP2'):addy(-38);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP2'):linear(1.82);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP2'):addx(-182);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP2'):addy(91);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP2'):linear(2);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP2'):addx(230);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP2'):addy(115);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP2'):linear(0.28);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP2'):addx(28);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP2'):addy(-14);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP2'):linear(2.6);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP2'):addx(-260);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP2'):addy(-130);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP2'):linear(1.24);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP2'):addx(124);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP2'):addy(-62);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP2'):linear(1.36);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP2'):addx(136);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP2'):addy(68);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP2'):linear(2.6);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP2'):addx(-260);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP2'):addy(130);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP2'):linear(0.12);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP2'):addx(16);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP2'):addy(8);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP2'):linear(2.44);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP2'):addx(244);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP2'):addy(-122);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP2'):linear(1.68);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP2'):addx(-168);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP2'):addy(-84);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP2'):linear(0.92);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP2'):addx(-92);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP2'):addy(46);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP2'):linear(2.6);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP2'):addx(260);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP2'):addy(130);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP2'):linear(0.6);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP2'):addx(-60);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP2'):addy(30);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP2'):linear(2);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP2'):addx(-200);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP2'):addy(-100);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP2'):linear(2.1);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP2'):addx(210);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP2'):addy(-105);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP2'):linear(0.5);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP2'):addx(50);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP2'):addy(25);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP2'):linear(2.6);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP2'):addx(-260);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP2'):addy(130);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP2'):linear(1);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP2'):addx(100);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP2'):addy(50);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP2'):linear(1.6);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP2'):addx(160);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP2'):addy(-80);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP2'):linear(2.5);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP2'):addx(-250);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP2'):addy(-125);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP2'):linear(0.1);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP2'):addx(-10);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP2'):addy(5);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP2'):linear(2.6);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP2'):addx(260);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP2'):addy(130);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP2'):linear(1.44);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP2'):addx(-142);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP2'):addy(71);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP2'):linear(1.18);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP2'):addx(-118);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP2'):addy(-59);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP2'):linear(2.6);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP2'):addx(260);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP2'):addy(-130);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP2'):linear(0.36);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP2'):addx(-36);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP2'):addy(-18);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP2'):linear(2.24);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP2'):addx(-224);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP2'):addy(112);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP2'):linear(0.44);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP2'):addx(44);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP2'):addy(22);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP2'):decelerate(1.2);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP2'):zoom(ScoreP2zoom);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP2'):x(ScoreP2x);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP2'):y(ScoreP2y);
+					end
+					
+					fgcurcommand = fgcurcommand + 1;
+				end
+				
+				
+				
+				
+				
+				
+				
+				if GAMESTATE:GetSongBeat()>=352 and fgcurcommand == 5 then
+					if GAMESTATE:IsHumanPlayer(PLAYER_1) then
+						SCREENMAN:GetTopScreen():GetChild('PlayerP1'):linear(9.6);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP1'):rotationz(12960);
+					end
+					if GAMESTATE:IsHumanPlayer(PLAYER_2) then
+						SCREENMAN:GetTopScreen():GetChild('PlayerP2'):linear(9.6);
+						SCREENMAN:GetTopScreen():GetChild('PlayerP2'):rotationz(12960);
+					end
+					
+					fgcurcommand = fgcurcommand + 1;
+				end
+				
+				
+				
+				
+				if GAMESTATE:GetSongBeat()>=384 and fgcurcommand == 6 then
+					if GAMESTATE:IsHumanPlayer(PLAYER_1) then
+						SCREENMAN:GetTopScreen():GetChild('LifeP1'):linear(1.8);
+						SCREENMAN:GetTopScreen():GetChild('LifeP1'):zoomy(0);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP1'):linear(1.8);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP1'):zoomx(0);
+					end
+					if GAMESTATE:IsHumanPlayer(PLAYER_2) then
+						SCREENMAN:GetTopScreen():GetChild('LifeP2'):linear(1.8);
+						SCREENMAN:GetTopScreen():GetChild('LifeP2'):zoomy(0);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP2'):linear(1.8);
+						SCREENMAN:GetTopScreen():GetChild('ScoreP2'):zoomx(0);
+					end
+					
+					fgcurcommand = fgcurcommand + 1;
+				end
+				
+				
+				
+			
+			end
+			
+			self:queuecommand('Update2');
+			
+		end"
+  
+
+		Update2Command="%function(self)
+		self:sleep(0.0166666666);
+		self:queuecommand('Update');
+		end"
+		
+	/>
+
+	
+	
+</children></ActorFrame>
