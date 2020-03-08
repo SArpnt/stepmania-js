@@ -1,6 +1,9 @@
 const canvas = document.getElementById('canvas')
 const ctx = canvas.getContext('2d')
 
+var chartPath='./Songs/WinDEU Hates You Forever/Sebben Crudele/'
+var audio = new Audio(chartPath+'Sebben Crudele.ogg')
+
 function step() {
 
 	window.setTimeout(step, 8.333333333333334) //120 tps
@@ -51,5 +54,11 @@ function press(v) {
 	}
 }
 
-step()
-requestAnimationFrame(draw)
+canvas.onclick = function () {
+	audio.play()
+	step()
+	requestAnimationFrame(draw)
+	canvas.onclick = ''
+}
+ctx.fillStyle = "black"
+ctx.fillRect(0, 0, 640, 480)
