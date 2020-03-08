@@ -1,15 +1,18 @@
 const canvas = document.getElementById('canvas')
 const ctx = canvas.getContext('2d')
 
-var chartPath='./Songs/WinDEU Hates You Forever/Sebben Crudele/'
-var audio = new Audio(chartPath+'Sebben Crudele.ogg')
-
-function step() {
-
-	window.setTimeout(step, 8.333333333333334) //120 tps
-	document.getElementById("tps").innerHTML = Math.round(1000 / 8.333333333333334)
+var startTime
+var step
+{
+	var tpsC = 0
+	var now = 0
+	step = function () {
+		tpsC = now
+		now = performance.now() - startTime
+		document.getElementById("tps").innerHTML = Math.round(1000 / (now - tpsC))
+		window.setTimeout(step, 8.333333333333334) //120 tps
+	}
 }
-
 var lastMs = 0
 function draw(ms) {
 	ctx.fillStyle = "magenta"
@@ -54,11 +57,30 @@ function press(v) {
 	}
 }
 
-canvas.onclick = function () {
+var chartPath = './Songs/WinDEU Hates You Forever/Sebben Crudele/'
+{
+	var xhr = new XMLHttpRequest()
+	xhr.onreadystatechange = function () {
+		if (xhr.readyState == 4 && xhr.status == 200) {
+			canvas.onclick = () => {
+				startGame(xhr.responseText)
+				canvas.onclick = null
+			}
+		}
+	}
+	xhr.open('GET', chartPath + 'Sebben Crudele.sm')
+	xhr.send()
+}
+
+function startGame(sm) {
+	var audio = new Audio(chartPath + 'Sebben Crudele.ogg')
+	console.log(sm)
+
 	audio.play()
+	startTime = performance.now()
 	step()
 	requestAnimationFrame(draw)
-	canvas.onclick = ''
 }
+
 ctx.fillStyle = "black"
 ctx.fillRect(0, 0, 640, 480)
