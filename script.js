@@ -63,6 +63,7 @@ var chartPath = './Songs/WinDEU Hates You Forever/Sebben Crudele/'
 	xhr.onreadystatechange = function () {
 		if (xhr.readyState == 4 && xhr.status == 200) {
 			canvas.onclick = () => {
+				console.log(xhr.responseText)
 				startGame(xhr.responseText)
 				canvas.onclick = null
 			}
