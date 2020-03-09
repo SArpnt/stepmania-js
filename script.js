@@ -57,16 +57,15 @@ function press(v) {
 	}
 }
 
-var chartPath = './Songs/WinDEU Hates You Forever/Sebben Crudele/'
+var chartPath = 'https://tumpnt.github.io/stepmania-js/Songs/WinDEU Hates You Forever/Sebben Crudele/'
 {
 	var xhr = new XMLHttpRequest()
 	xhr.onreadystatechange = function () {
 		if (xhr.readyState == 4 && xhr.status == 200) {
+			let data = parseSM(xhr.responseText)
+
 			canvas.onclick = () => {
-				console.log(1)
-				console.log(xhr.responseText)
-				console.log(1,xhr.responseText)
-				startGame(xhr.responseText)
+				startGame(data)
 				canvas.onclick = null
 			}
 		}
@@ -74,12 +73,46 @@ var chartPath = './Songs/WinDEU Hates You Forever/Sebben Crudele/'
 	xhr.open('GET', chartPath + 'Sebben Crudele.sm')
 	xhr.send()
 }
+function parseSM(sm) {
+	var out = {}
+	sm = sm.replace(/\/\/.*/g, '')
+		.replace(/\r?\n|\r/g, '')
+		.split(';')
+	for (let i = sm.length - 1; i >= 0; i -= 1) {
+		if (sm[i]) {
+			sm[i] = sm[i].split(/:/g)
+			for (let p in sm[i])
+				sm[i][p] = sm[i][p].trim()
+		}
+		else
+			sm.splice(i, 1)
+	}
+	for (i in sm) {
+		var p = sm[i]
+		switch (p[0]) {
+			case '#MUSIC':
+				out.audio = new Audio(chartPath + p[1])
+				break
+			case '#NOTES':
+				let steps = p[6]
+				steps = steps.split(',')
+				for (let i in steps) {
+					if (steps[i].length % 4) // if length is not divisible by 4
+						throw `Invalid length on measure ${i}, ${steps[i].length}, ${steps[i]}`
+					steps[i].split(/.{4}/g)
+					console.log(steps[i])
+				}
+				console.log(steps)
+				break
+			default:
+				console.log(`Unrecognised sm property "${p[0]}"`)
+		}
+	}
+	return out
+}
 
-function startGame(sm) {
-	var audio = new Audio(chartPath + 'Sebben Crudele.ogg')
-	console.log(sm)
-
-	audio.play()
+function startGame({ audio, notes }) {
+	if (audio) audio.play()
 	startTime = performance.now()
 	step()
 	requestAnimationFrame(draw)
