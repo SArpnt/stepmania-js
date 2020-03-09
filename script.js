@@ -74,7 +74,7 @@ var chartPath = 'https://tumpnt.github.io/stepmania-js/Songs/WinDEU Hates You Fo
 	xhr.send()
 }
 function parseSM(sm) {
-	var out = {}
+	var out = {notes:[]}
 	sm = sm.replace(/\/\/.*/g, '')
 		.replace(/\r?\n|\r/g, '')
 		.split(';')
@@ -87,27 +87,72 @@ function parseSM(sm) {
 		else
 			sm.splice(i, 1)
 	}
+	var steps
+	var bpms
 	for (i in sm) {
-		var p = sm[i]
+		let p = sm[i]
 		switch (p[0]) {
 			case '#MUSIC':
 				out.audio = new Audio(chartPath + p[1])
 				break
+			case '#BPMS':
+				bpms = p[1].split('=')//doesn't work with bpm changes
+				break
 			case '#NOTES':
-				let steps = p[6]
-				steps = steps.split(',')
-				for (let i in steps) {
-					if (steps[i].length % 4) // if length is not divisible by 4
-						throw `Invalid length on measure ${i}, ${steps[i].length}, ${steps[i]}`
-					steps[i].split(/.{4}/g)
-					console.log(steps[i])
-				}
-				console.log(steps)
+				steps = p[6].split(',') //only grabs first difficulty
 				break
 			default:
 				console.log(`Unrecognised sm property "${p[0]}"`)
 		}
 	}
+	/*{
+		let t = [steps, bpms]
+		for (let i in t)
+			if (!t[i]) throw `Missing neccesary info (${t[i]})`
+	}*/
+	{
+		let unfinHolds = [undefined, undefined, undefined, undefined]
+		for (let m in steps) { // m for measure
+			steps[m] = steps[m].trim()
+			if (steps[m].length % 4) // if length is not divisible by 4
+				throw `Invalid length on measure ${m}, ${steps[m].length}, ${steps[m]}`
+			steps[m] = steps[m].match(/(.{4})/g)
+
+			let t = steps[m].length // t for time (time between notes)
+			for (let l in steps[m]) { // l for line
+				let nt = steps[m][l]
+				let note = [{}, {}, {}, {}]
+				let b = m * l * t // for efficiency
+				for (let d = 0; d < note.length; d++) { // d for direction
+					switch (nt[d]) {
+						case '3':
+							if (!unfinHolds[d]) throw `hold end without any hold before at measure ${m}, line ${l}`
+							out.notes[unfinHolds[d]].beatend = b
+							// add more hold end script
+							delete unfinHolds[d]
+						case '0':
+							note.splice(d, 1)
+							d--
+							continue
+						case '4':
+						case '2':
+							if (unfinHolds[d]) throw `new hold started before last ended at measure ${m}, line ${l}`
+							unfinHolds[d] = out.notes.length + d
+						case '1':
+						case 'M':
+							note[d].type = nt[d]
+							break
+						default:
+							throw `invalid note type ${nt[d]} at measure ${m}, line ${l}`
+					}
+					note[d].beat = b
+					note[d].column = d
+				}
+				out.notes = out.notes.concat(note)
+			}
+		}
+	}
+	console.log(out.notes)
 	return out
 }
 
