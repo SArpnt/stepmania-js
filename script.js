@@ -74,7 +74,7 @@ var chartPath = 'https://tumpnt.github.io/stepmania-js/Songs/WinDEU Hates You Fo
 	xhr.send()
 }
 function parseSM(sm) {
-	var out = {notes:[]}
+	var out = { notes: [] }
 	sm = sm.replace(/\/\/.*/g, '')
 		.replace(/\r?\n|\r/g, '')
 		.split(';')
@@ -111,7 +111,7 @@ function parseSM(sm) {
 			if (!t[i]) throw `Missing neccesary info (${t[i]})`
 	}*/
 	{
-		let unfinHolds = [undefined, undefined, undefined, undefined]
+		let unfinHolds = [null, null, null, null]
 		for (let m in steps) { // m for measure
 			steps[m] = steps[m].trim()
 			if (steps[m].length % 4) // if length is not divisible by 4
@@ -123,21 +123,22 @@ function parseSM(sm) {
 				let nt = steps[m][l]
 				let note = [{}, {}, {}, {}]
 				let b = m * l * t // for efficiency
-				for (let d = 0; d < note.length; d++) { // d for direction
+				for (let d in note) { // d for direction
 					switch (nt[d]) {
 						case '3':
-							if (!unfinHolds[d]) throw `hold end without any hold before at measure ${m}, line ${l}`
+							console.log(d, nt, unfinHolds)
+							if (unfinHolds[d] == null) throw `hold end without any hold before at measure ${m}, line ${l}`
 							out.notes[unfinHolds[d]].beatend = b
 							// add more hold end script
-							delete unfinHolds[d]
+							unfinHolds[d] = null
 						case '0':
-							note.splice(d, 1)
-							d--
+							note[d] = null
 							continue
 						case '4':
 						case '2':
 							if (unfinHolds[d]) throw `new hold started before last ended at measure ${m}, line ${l}`
 							unfinHolds[d] = out.notes.length + d
+							console.log(unfinHolds)
 						case '1':
 						case 'M':
 							note[d].type = nt[d]
@@ -151,6 +152,7 @@ function parseSM(sm) {
 				out.notes = out.notes.concat(note)
 			}
 		}
+		out.notes = out.notes.filter(i => i !== null)
 	}
 	console.log(out.notes)
 	return out
