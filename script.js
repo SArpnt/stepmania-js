@@ -210,7 +210,6 @@ function beatToSec(beat) {
 }
 
 function startGame({ audio, offset }) {
-	console.log(offset)
 	if (audio) audio.play()
 	else console.log('No audio found')
 	startTime = performance.now() - offset*1000
