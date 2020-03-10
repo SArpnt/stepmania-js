@@ -19,15 +19,27 @@ var draw
 	draw = function (ms) {
 		let sec = getSec()
 		let beat = secToBeat(sec)
-		ctx.fillStyle = "magenta"
+		let size = 32 //temporary render variable
+		let speed = 4 //temporary render variable
+		ctx.fillStyle = "#000000"
 		ctx.fillRect(0, 0, 640, 480)//temporary background
-		ctx.fillStyle = "black"
-		for (let n in notes)
+		for (let n in notes) {
+			if (notes[n].beat - beat > 0)
+				ctx.fillStyle = {
+					'M': '#ff0000',
+					'1': '#ffffff',
+					'2': '#00ffff',
+					'4': '#00ff00'
+				}[notes[n].type]
+			else
+				ctx.fillStyle = '#ff00ff'
 			ctx.fillRect(
-				notes[n].column * 16,
-				(notes[n].beat - beat) * 16,
-				12, 12
+				notes[n].column * size,
+				(notes[n].beat - beat) * speed * size,
+				size,
+				(notes[n].beatLength * speed * size + size || size)
 			)
+		}
 
 		document.getElementById("fps").innerHTML = Math.round(1 / (sec - fpsC))
 		fpsC = sec
@@ -140,7 +152,7 @@ function parseSM(sm) {
 			for (let l in steps[m]) { // l for line
 				let nt = steps[m][l]
 				let note = [{}, {}, {}, {}]
-				let b = m * 4 + l * t // for efficiency
+				let b = m * 4 + l / t * 4 // for efficiency
 				for (let c = 0; c < note.length; c++) { // c for column
 					switch (nt[c]) {
 						case '3':
