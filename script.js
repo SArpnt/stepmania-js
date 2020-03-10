@@ -1,4 +1,4 @@
-const canvas = document.getElementById('canvas')
+const canvas = $('#canvas')[0]
 const ctx = canvas.getContext('2d')
 
 var startTime
@@ -20,7 +20,8 @@ var draw
 		let sec = getSec()
 		let beat = secToBeat(sec)
 		let size = 32 //temporary render variable
-		let speed = 4 //temporary render variable
+		let xMod = 4 //temporary render variable
+		let cMod = 480 / 60 //temporary render variable
 		ctx.fillStyle = "#000000"
 		ctx.fillRect(0, 0, 640, 480)//temporary background
 		for (let n in notes) {
@@ -35,9 +36,14 @@ var draw
 				ctx.fillStyle = '#ff00ff'
 			ctx.fillRect(
 				notes[n].column * size,
-				(notes[n].beat - beat) * speed * size,
+				(notes[n].beat - beat) * xMod * size,
 				size,
-				(notes[n].beatLength * speed * size || 0) + size
+				(notes[n].beatLength * xMod * size || 0) + size)
+			ctx.fillRect(
+				(5 + notes[n].column) * size,
+				(notes[n].sec - sec) * cMod * size,
+				size,
+				(notes[n].secLength * cMod * size || 0) + size
 			)
 		}
 
@@ -86,19 +92,19 @@ function press(v) {
  */
 var bpms
 var notes = []
-var chartPath = 'https://tumpnt.github.io/stepmania-js/Songs/WinDEU Hates You Forever/Sebben Crudele/'
-$.ajax({
-	url:chartPath + 'Sebben Crudele.sm',
-	success: (result) => {
-			let data = parseSM(result)
-
-			canvas.onclick = () => {
-				startGame(data)
-				canvas.onclick = null
-			}
-	}
-})
-function parseSM(sm) {
+var chartPath = 'https://tumpnt.github.io/stepmania-js/Songs/WinDEU Hates You Forever/'
+$('#startButton')[0].onclick = () => {
+	this.onclick = null
+	let songName = $('#chartSelect')[0].value
+	$.ajax({
+		url: chartPath + songName + '/' + songName + '.sm',
+		success: (result) => {
+			let data = parseSM(result, chartPath + songName + '/')
+			startGame(data)
+		}
+	})
+}
+function parseSM(sm, audioPath) {
 	var out = {}
 	sm = sm.replace(/\/\/.*/g, '')
 		.replace(/\r?\n|\r/g, '')
@@ -117,7 +123,10 @@ function parseSM(sm) {
 		let p = sm[i]
 		switch (p[0]) {
 			case '#MUSIC':
-				out.audio = new Audio(chartPath + p[1])
+				out.audio = new Audio(audioPath + p[1])
+				break
+			case '#OFFSET':
+				out.offset = Number(p[1])//doesn't work with bpm changes
 				break
 			case '#BPMS':
 				bpms = [p[1].split('=')]//doesn't work with bpm changes
@@ -195,9 +204,9 @@ function beatToSec(beat) {
 	return beat / bpms[0][1] * 60 //doesn't work with multiple bpm changes
 }
 
-function startGame({ audio }) {
+function startGame({ audio, offset }) {
 	if (audio) audio.play()
-	startTime = performance.now()
+	startTime = performance.now() - offset*1000
 	step()
 	requestAnimationFrame(draw)
 }
