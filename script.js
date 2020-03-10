@@ -100,7 +100,12 @@ $('#startButton')[0].onclick = function () {
 		url: chartPath + songName + '/' + songName + '.sm',
 		success: (result) => {
 			let data = parseSM(result, chartPath + songName + '/')
-			startGame(data)
+			let sG
+			sG = function () { 
+				data.audio.removeEventListener('canplaythrough', sG)
+				startGame(data)
+			}
+			data.audio.addEventListener('canplaythrough', sG)
 		}
 	})
 }
@@ -205,11 +210,12 @@ function beatToSec(beat) {
 }
 
 function startGame({ audio, offset }) {
+	console.log(offset)
 	if (audio) audio.play()
+	else console.log('No audio found')
 	startTime = performance.now() - offset*1000
 	step()
 	requestAnimationFrame(draw)
 }
-
-ctx.fillStyle = "black"
+ctx.fillStyle = "grey"
 ctx.fillRect(0, 0, 640, 480)
