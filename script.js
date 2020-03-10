@@ -92,24 +92,37 @@ function press(v) {
  */
 var bpms
 var notes = []
-var chartPath = 'https://tumpnt.github.io/stepmania-js/Songs/WinDEU Hates You Forever/'
+var chartFiles
 $('#startButton')[0].onclick = function () {
 	this.disabled = true
-	let songName = $('#chartSelect')[0].value
-	$.ajax({
-		url: chartPath + songName + '/' + songName + '.sm',
-		success: (result) => {
-			let data = parseSM(result, chartPath + songName + '/')
-			let sG
-			sG = function () { 
-				data.audio.removeEventListener('canplaythrough', sG)
-				startGame(data)
-			}
-			data.audio.addEventListener('canplaythrough', sG)
+	{
+		let CFRO = $('#chartFile')[0].files
+		chartFiles = {}
+		for (let i in CFRO)
+			chartFiles[CFRO[i].name] = CFRO[i]
+	}
+	console.log(chartFiles)
+	let sm
+	for (let i in chartFiles)
+		if (/.sm$/.exec(i)) {
+			if (sm) throw `2 .sm files, ${sm} & ${i}`
+			else sm = i
 		}
-	})
+	console.log(sm)
+
+	var reader = new FileReader()
+	reader.onload = ({ target: { result } }) => {
+		let data = parseSM(result)
+		let sG
+		sG = function () {
+			data.audio.removeEventListener('canplaythrough', sG)
+			startGame(data)
+		}
+		data.audio.addEventListener('canplaythrough', sG)
+	}
+	reader.readAsText(chartFiles[sm])
 }
-function parseSM(sm, audioPath) {
+function parseSM(sm) {
 	var out = {}
 	sm = sm.replace(/\/\/.*/g, '')
 		.replace(/\r?\n|\r/g, '')
@@ -128,7 +141,7 @@ function parseSM(sm, audioPath) {
 		let p = sm[i]
 		switch (p[0]) {
 			case '#MUSIC':
-				out.audio = new Audio(audioPath + p[1])
+				out.audio = new Audio(URL.createObjectURL(chartFiles[p[1]]))
 				break
 			case '#OFFSET':
 				out.offset = Number(p[1])//doesn't work with bpm changes
@@ -212,7 +225,7 @@ function beatToSec(beat) {
 function startGame({ audio, offset }) {
 	if (audio) audio.play()
 	else console.log('No audio found')
-	startTime = performance.now() - offset*1000
+	startTime = performance.now() - offset * 1000
 	step()
 	requestAnimationFrame(draw)
 }

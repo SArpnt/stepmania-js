@@ -10,21 +10,17 @@
 	<div>TPS: <span id="tps"></span></div>
 	<form>
 		<label>chart:</label>
-		<select id="chartSelect">
-			<option value="Border Of Life">Border Of Life</option>
-			<option value="Floating Darkness">Floating Darkness</option>
-			<option value="Lawn Wake XI">Lawn Wake XI</option>
-			<option value="Mars War 3">Mars War 3</option>
-			<option value="Sebben Crudele">Sebben Crudele</option>
-			<option value="The Detonator">The Detonator</option>
-		</select>
+		<input type="file" id="chartFile" webkitdirectory directory multiple>
 		<input type="button" id="startButton" value="Start">
 	</form>
+	Upload the song folder (It should contain an sm file!) <br>
+	After starting, page has to be refreshed to be used again
 	<script src="script.js"></script>
+	<br>
+	<br>
 	todo:
 	<ul>
 		<li>do #bpm, and #stops</li>
-		<li>setup form</li>
 		<li>make sure jquery is used well</li>
 	</ul>
 </body>
