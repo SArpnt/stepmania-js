@@ -3,25 +3,36 @@ const ctx = canvas.getContext('2d')
 
 var startTime
 var step
+var draw
 {
 	var tpsC = 0
-	var now = 0
+	var fpsC = 0
+	var getSec = () => { return (performance.now() - startTime) / 1000 }
+
 	step = function () {
+		let now = getSec()
+		document.getElementById("tps").innerHTML = Math.round(1 / (now - tpsC))
 		tpsC = now
-		now = performance.now() - startTime
-		document.getElementById("tps").innerHTML = Math.round(1000 / (now - tpsC))
 		window.setTimeout(step, 8.333333333333334) //120 tps
 	}
-}
-var lastMs = 0
-function draw(ms) {
-	ctx.fillStyle = "magenta"
-	ctx.fillRect(0, 0, 640, 480)//temporary background
 
-	document.getElementById("fps").innerHTML = Math.round(1000 / (ms - lastMs))//fps counter
-	lastMs = ms
+	draw = function (ms) {
+		let sec = getSec()
+		let beat = secToBeat(sec)
+		ctx.fillStyle = "magenta"
+		ctx.fillRect(0, 0, 640, 480)//temporary background
+		ctx.fillStyle = "black"
+		for (let n in notes)
+			ctx.fillRect(
+				notes[n].column * 16,
+				(notes[n].beat - beat) * 16,
+				12, 12
+			)
 
-	requestAnimationFrame(draw)
+		document.getElementById("fps").innerHTML = Math.round(1 / (sec - fpsC))
+		fpsC = sec
+		requestAnimationFrame(draw)
+	}
 }
 
 addEventListener("keydown", press(true))
@@ -57,6 +68,12 @@ function press(v) {
 	}
 }
 
+/**
+ * @type {[[number, number]...]}
+ * [[time (sec), bpm]...]
+ */
+var bpms
+var notes = []
 var chartPath = 'https://tumpnt.github.io/stepmania-js/Songs/WinDEU Hates You Forever/Sebben Crudele/'
 {
 	var xhr = new XMLHttpRequest()
@@ -74,7 +91,7 @@ var chartPath = 'https://tumpnt.github.io/stepmania-js/Songs/WinDEU Hates You Fo
 	xhr.send()
 }
 function parseSM(sm) {
-	var out = { notes: [] }
+	var out = {}
 	sm = sm.replace(/\/\/.*/g, '')
 		.replace(/\r?\n|\r/g, '')
 		.split(';')
@@ -88,15 +105,16 @@ function parseSM(sm) {
 			sm.splice(i, 1)
 	}
 	var steps
-	var bpms
-	for (i in sm) {
+	for (let i in sm) {
 		let p = sm[i]
 		switch (p[0]) {
 			case '#MUSIC':
 				out.audio = new Audio(chartPath + p[1])
 				break
 			case '#BPMS':
-				bpms = p[1].split('=')//doesn't work with bpm changes
+				bpms = [p[1].split('=')]//doesn't work with bpm changes
+				bpms[0][0] = Number(bpms[0][0])
+				bpms[0][1] = Number(bpms[0][1])
 				break
 			case '#NOTES':
 				steps = p[6].split(',') //only grabs first difficulty
@@ -105,11 +123,11 @@ function parseSM(sm) {
 				console.log(`Unrecognised sm property "${p[0]}"`)
 		}
 	}
-	/*{
-		let t = [steps, bpms]
+	{
+		let t = [[steps, '#NOTES'], [bpms, '#BPMS']]
 		for (let i in t)
-			if (!t[i]) throw `Missing neccesary info (${t[i]})`
-	}*/
+			if (!t[i][0]) throw `Missing neccesary info (${t[i][1]})`
+	}
 	{
 		let unfinHolds = [null, null, null, null]
 		for (let m in steps) { // m for measure
@@ -122,43 +140,54 @@ function parseSM(sm) {
 			for (let l in steps[m]) { // l for line
 				let nt = steps[m][l]
 				let note = [{}, {}, {}, {}]
-				let b = m * l * t // for efficiency
-				for (let d in note) { // d for direction
-					switch (nt[d]) {
+				let b = m * 4 + l * t // for efficiency
+				for (let c = 0; c < note.length; c++) { // c for column
+					switch (nt[c]) {
 						case '3':
-							console.log(d, nt, unfinHolds)
-							if (unfinHolds[d] == null) throw `hold end without any hold before at measure ${m}, line ${l}`
-							out.notes[unfinHolds[d]].beatend = b
+							if (unfinHolds[c] == null) throw `hold end without any hold before at measure ${m}, line ${l}`
+							{
+								let i = notes[unfinHolds[c]]
+								i.beatEnd = b
+								i.beatLength = b - i.beat
+								i.secEnd = beatToSec(b)
+								i.secLength = beatToSec(b - i.beat)
+							}
 							// add more hold end script
-							unfinHolds[d] = null
+							unfinHolds[c] = null
 						case '0':
-							note[d] = null
+							note[c] = null
 							continue
 						case '4':
 						case '2':
-							if (unfinHolds[d]) throw `new hold started before last ended at measure ${m}, line ${l}`
-							unfinHolds[d] = out.notes.length + d
-							console.log(unfinHolds)
+							if (unfinHolds[c]) throw `new hold started before last ended at measure ${m}, line ${l}`
+							unfinHolds[c] = notes.length + c
 						case '1':
 						case 'M':
-							note[d].type = nt[d]
+							note[c].type = nt[c]
 							break
 						default:
-							throw `invalid note type ${nt[d]} at measure ${m}, line ${l}`
+							throw `invalid note type ${nt[c]} at measure ${m}, line ${l}`
 					}
-					note[d].beat = b
-					note[d].column = d
+					note[c].beat = b
+					note[c].sec = beatToSec(b)
+					note[c].column = c
 				}
-				out.notes = out.notes.concat(note)
+				notes = notes.concat(note)
 			}
 		}
-		out.notes = out.notes.filter(i => i !== null)
+		notes = notes.filter(i => i !== null)
 	}
-	console.log(out.notes)
 	return out
 }
 
-function startGame({ audio, notes }) {
+function secToBeat(sec) {
+	return sec * bpms[0][1] / 60 //doesn't work with multiple bpm changes
+}
+function beatToSec(beat) {
+	return beat / bpms[0][1] * 60 //doesn't work with multiple bpm changes
+}
+
+function startGame({ audio }) {
 	if (audio) audio.play()
 	startTime = performance.now()
 	step()
