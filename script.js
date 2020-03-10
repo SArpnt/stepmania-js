@@ -93,8 +93,8 @@ function press(v) {
 var bpms
 var notes = []
 var chartPath = 'https://tumpnt.github.io/stepmania-js/Songs/WinDEU Hates You Forever/'
-$('#startButton')[0].onclick = () => {
-	this.onclick = null
+$('#startButton')[0].onclick = function () {
+	this.disabled = true
 	let songName = $('#chartSelect')[0].value
 	$.ajax({
 		url: chartPath + songName + '/' + songName + '.sm',
