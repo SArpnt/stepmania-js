@@ -1,12 +1,25 @@
 <html>
 
 <head>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 </head>
 
 <body>
 	<canvas id="canvas" width="640" height="480"></canvas>
 	<div>FPS: <span id="fps"></span></div>
 	<div>TPS: <span id="tps"></span></div>
+	<form>
+		<label>chart:</label>
+		<select id="song group">
+			<option value="Border Of Life/">Border Of Life</option>
+			<option value="Floating Darkness/">Floating Darkness</option>
+			<option value="Lawn Wake XI/">Lawn Wake XI</option>
+			<option value="Mars War 3/">Mars War 3</option>
+			<option value="Sebben Crudele/">Sebben Crudele</option>
+			<option value="The Detonator/">The Detonator</option>
+		</select>
+		<input type="submit" value="Start">
+	</form>
 	<script src="script.js"></script>
 </body>
 

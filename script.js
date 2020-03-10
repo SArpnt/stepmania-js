@@ -13,7 +13,7 @@ var draw
 		let now = getSec()
 		document.getElementById("tps").innerHTML = Math.round(1 / (now - tpsC))
 		tpsC = now
-		window.setTimeout(step, 8.333333333333334) //120 tps
+		window.setTimeout(step, 0)
 	}
 
 	draw = function (ms) {
@@ -37,7 +37,7 @@ var draw
 				notes[n].column * size,
 				(notes[n].beat - beat) * speed * size,
 				size,
-				(notes[n].beatLength * speed * size + size || size)
+				(notes[n].beatLength * speed * size || 0) + size
 			)
 		}
 
@@ -87,21 +87,17 @@ function press(v) {
 var bpms
 var notes = []
 var chartPath = 'https://tumpnt.github.io/stepmania-js/Songs/WinDEU Hates You Forever/Sebben Crudele/'
-{
-	var xhr = new XMLHttpRequest()
-	xhr.onreadystatechange = function () {
-		if (xhr.readyState == 4 && xhr.status == 200) {
-			let data = parseSM(xhr.responseText)
+$.ajax({
+	url:chartPath + 'Sebben Crudele.sm',
+	success: (result) => {
+			let data = parseSM(result)
 
 			canvas.onclick = () => {
 				startGame(data)
 				canvas.onclick = null
 			}
-		}
 	}
-	xhr.open('GET', chartPath + 'Sebben Crudele.sm')
-	xhr.send()
-}
+})
 function parseSM(sm) {
 	var out = {}
 	sm = sm.replace(/\/\/.*/g, '')
