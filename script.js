@@ -26,9 +26,9 @@ var draw
 		ctx.fillRect(0, 0, 640, 480)//temporary background
 		ctx.fillStyle = "#666666"
 		for ( //bar lines
-			i = Math.ceil(beat / 4)*4;
-			i < Math.ceil(beat / 4)*4 + 8;
-			i+=4
+			i = Math.ceil(beat / 4) * 4;
+			i < Math.ceil(beat / 4) * 4 + 8;
+			i += 4
 		) {
 			ctx.fillRect(
 				0 * size,
@@ -114,8 +114,13 @@ $('#startButton')[0].onclick = function () {
 	{
 		let CFRO = $('#chartFile')[0].files
 		chartFiles = {}
-		for (let i in CFRO)
-			chartFiles[CFRO[i].name] = CFRO[i]
+		console.log(CFRO)
+		for (let i = 0; i < CFRO.length; i++) {
+			console.log(CFRO[i])
+			let x = CFRO[i].name.toLowerCase()
+			chartFiles[x] = CFRO[i]
+			chartFiles[x].name = x
+		}
 	}
 	console.log(chartFiles)
 	let sm
@@ -159,7 +164,9 @@ function parseSM(sm) {
 		let p = sm[i]
 		switch (p[0]) {
 			case '#MUSIC':
-				out.audio = new Audio(URL.createObjectURL(chartFiles[p[1]]))
+				console.log(chartFiles)
+				console.log(p[1])
+				out.audio = new Audio(URL.createObjectURL(chartFiles[p[1].toLowerCase()]))
 				break
 			case '#OFFSET':
 				out.offset = Number(p[1])
