@@ -7,7 +7,7 @@ var draw
 {
 	var tpsC = 0
 	var fpsC = 0
-	var getSec = () => { return (performance.now() - startTime) / 1000 }
+	var getSec = () => (performance.now() - startTime) / 1000
 
 	step = function () {
 		let now = getSec()
@@ -86,11 +86,7 @@ function press(v) {
 	}
 }
 
-/**
- * @type {[[number, number]...]}
- * [[time (sec), bpm]...]
- */
-var bpms
+var bpmChanges
 var notes = []
 var chartFiles
 $('#startButton')[0].onclick = function () {
@@ -137,6 +133,8 @@ function parseSM(sm) {
 			sm.splice(i, 1)
 	}
 	var steps
+	bpmChanges = []
+	var stops = []
 	for (let i in sm) {
 		let p = sm[i]
 		switch (p[0]) {
@@ -144,13 +142,38 @@ function parseSM(sm) {
 				out.audio = new Audio(URL.createObjectURL(chartFiles[p[1]]))
 				break
 			case '#OFFSET':
-				out.offset = Number(p[1])//doesn't work with bpm changes
+				out.offset = Number(p[1])
 				break
 			case '#BPMS':
-				bpms = [p[1].split('=')]//doesn't work with bpm changes
-				bpms[0][0] = Number(bpms[0][0])
-				bpms[0][1] = Number(bpms[0][1])
+				{
+					console.log(`#BPMS: ${p[1]}`)
+					bx = p[1].split(',') //shortform for bpmChanges
+					for (let i in bx) {
+						let v = bx[i].split('=')
+						bx[i] = {
+							sec: Number(v[0]),
+							bpm: Number(v[1])
+						}
+					}
+					bpmChanges = bpmChanges.concat(bx)
+					console.log(bx)
+				}
 				break
+			case '#STOPS':
+				{
+					console.log(`#STOPS: ${p[1]}`)
+					bx = p[1].split(',') //shortform for bpmChanges
+					for (let i in bx) {
+						let v = bx[i].split('=')
+						bx[i] = {
+							sec: Number(v[0]),
+							end: Number(v[0]) + Number(v[1])
+						}
+					}
+					stops = stops.concat(bx)
+					console.log(bx)
+					break
+				}
 			case '#NOTES':
 				steps = p[6].split(',') //only grabs first difficulty
 				break
@@ -158,17 +181,41 @@ function parseSM(sm) {
 				console.log(`Unrecognised sm property "${p[0]}"`)
 		}
 	}
+	console.log(bpmChanges)
 	{
-		let t = [[steps, '#NOTES'], [bpms, '#BPMS']]
+		let t = [[steps, '#NOTES'], [bpmChanges.length, '#BPMS']]
 		for (let i in t)
 			if (!t[i][0]) throw `Missing neccesary info (${t[i][1]})`
 	}
-	{
+	{ //bpm processing
+		bpmChanges.sort((a, b) => a.sec - b.sec)
+		if (bpmChanges[0].sec !== 0) throw `No starting bpm, first bpm change is ${bpmChanges[0]}`
+		{ // turn stops into bpm changes
+			let bx = []
+			for (let i in stops) {
+				bx.push({
+					sec: stops[i].sec,
+					bpm: 0
+				})
+				bx.push({
+					sec: stops[i].end,
+					bpm: getLastBpm(stops[i].end, 'sec').bpm
+				})
+			}
+			console.log(bx)
+			bpmChanges = bpmChanges.concat(bx)
+		}
+		bpmChanges.sort((a, b) => a.sec - b.sec)
+		for (let i in bpmChanges) {
+			bpmChanges[i].beat=secToBeat(bpmChanges[i].sec)
+		}
+	}
+	{ //note processing
 		let unfinHolds = [null, null, null, null]
 		for (let m in steps) { // m for measure
 			steps[m] = steps[m].trim()
 			if (steps[m].length % 4) // if length is not divisible by 4
-				throw `Invalid length on measure ${m}, ${steps[m].length}, ${steps[m]}`
+				throw `Invalid length on measure ${m}, length is ${steps[m].length}, full string: ${steps[m]}`
 			steps[m] = steps[m].match(/(.{4})/g)
 
 			let t = steps[m].length // t for time (time between notes)
@@ -215,11 +262,18 @@ function parseSM(sm) {
 	return out
 }
 
+function getLastBpm(time, valueType) {
+	let x = bpmChanges.find((e, i, a) => (i + 1 == a.length) || (a[i + 1] | [valueType] >= time))
+	console.log(x)
+	return x
+}
 function secToBeat(sec) {
-	return sec * bpms[0][1] / 60 //doesn't work with multiple bpm changes
+	let b = getLastBpm(sec, 'sec')
+	return ((sec - b.sec) * b.bpm / 60) + b.beat
 }
 function beatToSec(beat) {
-	return beat / bpms[0][1] * 60 //doesn't work with multiple bpm changes
+	let b = getLastBpm(beat, 'beat')
+	return ((beat - b.beat) / b.bpm * 60) + b.sec
 }
 
 function startGame({ audio, offset }) {
