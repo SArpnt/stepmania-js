@@ -11,7 +11,7 @@ var draw
 
 	step = function () {
 		let now = getSec()
-		document.getElementById("tps").innerHTML = Math.round(1 / (now - tpsC))
+		$('#tps')[0].innerHTML = Math.round(1 / (now - tpsC))
 		tpsC = now
 		window.setTimeout(step, 0)
 	}
@@ -67,8 +67,10 @@ var draw
 			)
 		}
 
-		document.getElementById("fps").innerHTML = Math.round(1 / (sec - fpsC))
+		$("#fps")[0].innerHTML = Math.round(1 / (sec - fpsC))
 		fpsC = sec
+		$("#sec")[0].innerHTML = sec
+		$("#beat")[0].innerHTML = beat
 		requestAnimationFrame(draw)
 	}
 }
