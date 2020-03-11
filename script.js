@@ -24,7 +24,27 @@ var draw
 		let cMod = 480 / 60 //temporary render variable
 		ctx.fillStyle = "#000000"
 		ctx.fillRect(0, 0, 640, 480)//temporary background
-		for (let n in notes) {
+		ctx.fillStyle = "#666666"
+		for ( //bar lines
+			i = Math.ceil(beat / 4)*4;
+			i < Math.ceil(beat / 4)*4 + 8;
+			i+=4
+		) {
+			ctx.fillRect(
+				0 * size,
+				(i - beat) * xMod * size,
+				size * 4,
+				size / 4
+			)
+			ctx.fillRect(
+				5 * size,
+				(beatToSec(i) - sec) * cMod * size,
+				size * 4,
+				size / 4
+			)
+		}
+
+		for (let n in notes) { //notes
 			if (notes[n].beat - beat > 0)
 				ctx.fillStyle = {
 					'M': '#ff0000',
@@ -162,7 +182,7 @@ function parseSM(sm) {
 			case '#STOPS':
 				{
 					console.log(`#STOPS: ${p[1]}`)
-					bx = p[1].split(',') //shortform for bpmChanges
+					bx = p[1] ? p[1].split(',') : [] //shortform for bpmChanges
 					for (let i in bx) {
 						let v = bx[i].split('=')
 						bx[i] = {
@@ -202,6 +222,8 @@ function parseSM(sm) {
 					bpm: getLastBpm(stops[i].end, 'sec').bpm
 				})
 			}
+			console.log('bx:')
+			console.log(bx)
 			bpmChanges = bpmChanges.concat(bx)
 		}
 		bpmChanges.sort((a, b) => a.sec - b.sec)
