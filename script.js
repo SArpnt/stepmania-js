@@ -107,6 +107,7 @@ function press(v) {
 }
 
 var bpmChanges
+var stops
 var notes = []
 var chartFiles
 $('#startButton')[0].onclick = function () {
@@ -159,7 +160,7 @@ function parseSM(sm) {
 	}
 	var steps
 	bpmChanges = []
-	var stops = []
+	stops = []
 	for (let i in sm) {
 		let p = sm[i]
 		switch (p[0]) {
@@ -178,7 +179,7 @@ function parseSM(sm) {
 					for (let i in bx) {
 						let v = bx[i].split('=')
 						bx[i] = {
-							sec: Number(v[0]),
+							beat: Number(v[0]),
 							bpm: Number(v[1])
 						}
 					}
@@ -193,8 +194,8 @@ function parseSM(sm) {
 					for (let i in bx) {
 						let v = bx[i].split('=')
 						bx[i] = {
-							sec: Number(v[0]),
-							end: Number(v[0]) + Number(v[1])
+							beat: Number(v[0]),
+							len: Number(v[1])
 						}
 					}
 					stops = stops.concat(bx)
@@ -214,30 +215,17 @@ function parseSM(sm) {
 		for (let i in t)
 			if (!t[i][0]) throw `Missing neccesary info (${t[i][1]})`
 	}
-	{ //bpm processing
-		bpmChanges.sort((a, b) => a.sec - b.sec)
-		if (bpmChanges[0].sec !== 0) throw `No starting bpm, first bpm change is ${bpmChanges[0]}`
-		{ // turn stops into bpm changes
-			let bx = []
-			for (let i in stops) {
-				bx.push({
-					sec: stops[i].sec,
-					bpm: 0
-				})
-				bx.push({
-					sec: stops[i].end,
-					bpm: getLastBpm(stops[i].end, 'sec').bpm
-				})
-			}
-			console.log('bx:')
-			console.log(bx)
-			bpmChanges = bpmChanges.concat(bx)
-		}
-		bpmChanges.sort((a, b) => a.sec - b.sec)
-		bpmChanges[0].beat = 0
+	{ //bpm and stop processing
+		bpmChanges.sort((a, b) => a.beat - b.beat)
+		if (bpmChanges[0].beat !== 0) throw `No starting bpm, first bpm change is ${bpmChanges[0]}`
+		bpmChanges.sort((a, b) => a.beat - b.beat)
+		bpmChanges[0].sec = 0
 		for (let i = 1; i < bpmChanges.length; i++)
-			bpmChanges[i].beat = secToBeat(bpmChanges[i].sec)
+			bpmChanges[i].sec = beatToSec(bpmChanges[i].beat)
+		for (let i = 1; i < stops.length; i++)
+			stops[i].sec = beatToSec(stops[i].beat)
 		console.log(bpmChanges)
+		console.log(stops)
 	}
 	{ //note processing
 		let unfinHolds = [null, null, null, null]
@@ -296,11 +284,23 @@ function getLastBpm(time, valueType) {
 }
 function secToBeat(sec) {
 	let b = getLastBpm(sec, 'sec')
-	return ((sec - b.sec) * b.bpm / 60) + b.beat
+	/*let s = stops
+		.filter(({ sec: i }) => (i > b.sec) && (i < sec))
+		.map(i => i.len)
+	for (let i in s)
+		sec -= s[i]*/
+	let x = ((sec - b.sec) * b.bpm / 60) + b.beat
+	return x
 }
 function beatToSec(beat) {
 	let b = getLastBpm(beat, 'beat')
-	return ((beat - b.beat) / b.bpm * 60) + b.sec
+	let x = ((beat - b.beat) / b.bpm * 60) + b.sec
+	let s = stops
+		.filter(({ beat: i }) => (i > b.beat) && (i < beat))
+		.map(i => i.len)
+	for (let i in s)
+		x += s[i]
+	return x
 }
 
 function startGame({ audio, offset }) {
