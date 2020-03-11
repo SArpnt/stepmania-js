@@ -202,15 +202,13 @@ function parseSM(sm) {
 					bpm: getLastBpm(stops[i].end, 'sec').bpm
 				})
 			}
-			console.log(bx)
 			bpmChanges = bpmChanges.concat(bx)
 		}
 		bpmChanges.sort((a, b) => a.sec - b.sec)
 		bpmChanges[0].beat = 0
-		for (let i = 1; i < bpmChanges.length; i++) {
+		for (let i = 1; i < bpmChanges.length; i++)
 			bpmChanges[i].beat = secToBeat(bpmChanges[i].sec)
-			console.log('result',bpmChanges[i].beat)
-		}
+		console.log(bpmChanges)
 	}
 	{ //note processing
 		let unfinHolds = [null, null, null, null]
@@ -265,9 +263,7 @@ function parseSM(sm) {
 }
 
 function getLastBpm(time, valueType) {
-	let x = bpmChanges.find((e, i, a) => (i + 1 == a.length) || (a[i + 1][valueType] >= time))
-	console.log('lastbpm:', x)
-	return x
+	return bpmChanges.find((e, i, a) => (i + 1 == a.length) || (a[i + 1][valueType] >= time))
 }
 function secToBeat(sec) {
 	let b = getLastBpm(sec, 'sec')
