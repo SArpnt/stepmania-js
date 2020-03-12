@@ -12,8 +12,15 @@
 	<div>FPS: <span id="fps"></span></div>
 	<div>TPS: <span id="tps"></span></div>
 	<form>
-		<label>chart:</label>
-		<input type="file" id="chartFile" webkitdirectory directory multiple>
+		<label>chart:</label><br>
+		<input type="file" id="chartFile" webkitdirectory directory multiple><br>
+		<select id="difficulty">
+			<option value="Challenge">Challenge</option>
+			<option value="Hard">Hard</option>
+			<option value="Medium">Medium</option>
+			<option value="Easy">Easy</option>
+			<option value="Beginner">Beginner</option>
+		</select><br>
 		<input type="button" id="startButton" value="Start">
 	</form>
 	Upload the song folder (It should contain an sm file!) <br>

@@ -72,7 +72,7 @@ var draw
 			let bpmDis = $("#bpm")[0]
 			bpmDis.innerHTML = getLastBpm(sec, 'sec').bpm
 			let y = getLastStop(sec, 'sec')
-			bpmDis.style = `color:${(y.sec + y.len > sec) ? '#ff0000' : '#000000'}`
+			bpmDis.style = `color:${y && (y.sec + y.len > sec) ? '#ff0000' : '#000000'}`
 		}
 		fpsC = sec
 
@@ -163,7 +163,7 @@ function parseSM(sm) {
 		else
 			sm.splice(i, 1)
 	}
-	var steps
+	var steps = []
 	bpmChanges = []
 	stops = []
 	for (let i in sm) {
@@ -204,7 +204,7 @@ function parseSM(sm) {
 					break
 				}
 			case '#NOTES':
-				steps = p[6].split(',') //only grabs first difficulty
+				if (p[3] == $('#difficulty')[0].value) steps = p[6].split(',')
 				break
 			default:
 				console.log(`Unrecognised sm property "${p[0]}"`)
@@ -222,14 +222,10 @@ function parseSM(sm) {
 		bpmChanges[0].sec = 0
 		for (let i = 1; i < bpmChanges.length; i++) {
 			bpmChanges[i].sec = beatToSec(bpmChanges[i].beat)
-			console.log(bpmChanges[i])
 		}
 		for (let i = 0; i < stops.length; i++) {
 			stops[i].sec = beatToSec(stops[i].beat)
-			console.log(stops[i])
 		}
-		console.log(bpmChanges)
-		console.log(stops)
 	}
 	{ //note processing
 		let unfinHolds = [null, null, null, null]
