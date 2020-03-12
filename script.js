@@ -217,6 +217,10 @@ function parseSM(sm) {
 			bpmChanges[i].sec = beatToSec(bpmChanges[i].beat)
 			console.log(bpmChanges[i])
 		}
+		for (let i = 0; i < stops.length; i++) {
+			stops[i].sec = beatToSec(stops[i].beat)
+			console.log(stops[i])
+		}
 		console.log(bpmChanges)
 		console.log(stops)
 	}
@@ -277,23 +281,18 @@ function getLastBpm(time, valueType) {
 }
 function secToBeat(sec) {
 	let b = getLastBpm(sec, 'sec')
-	let s = stops
-		.filter(({ sec: i }) => (i >= b.sec) && (i < sec))
-		.map(i => i.len)
+	let si = stops.filter(({ sec: i }) => (i >= b.sec) && (i < sec))
+	let s = si.map(i => i.sec + i.len ? sec-i.sec : i.len)
 	for (let i in s)
 		sec -= s[i]
-	let x = ((sec - b.sec) * b.bpm / 60) + b.beat
-	return x
+	return ((sec - b.sec) * b.bpm / 60) + b.beat
 }
 function beatToSec(beat) {
 	let b = getLastBpm(beat, 'beat')
 	let x = ((beat - b.beat) / b.bpm * 60) + b.sec
 	let si = stops.filter(({ beat: i }) => (i >= b.beat) && (i < beat))
 	let s = si.map(i => i.len)
-	//console.log(si)
-	//console.log('before stops:', x)
 	for (let i in s) {
-		//console.log('stop being added:', s[i])
 		x += s[i]
 	}
 	return x
