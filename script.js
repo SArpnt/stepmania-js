@@ -18,7 +18,7 @@ var draw
 		tpsC = now
 	}
 
-	draw = function (ms) {
+	draw = function () {
 		requestAnimationFrame(draw)
 		let sec = getSec()
 		let beat = secToBeat(sec)
