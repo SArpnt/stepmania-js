@@ -27,7 +27,7 @@ var draw
 		ctx.fillStyle = "#666666"
 		for ( //bar lines
 			i = Math.ceil(beat / 4) * 4;
-			i < Math.ceil(beat / 4) * 4 + 8;
+			i < (Math.ceil(beat / 4) + 8) * 4;
 			i += 4
 		) {
 			ctx.fillRect(
@@ -45,7 +45,7 @@ var draw
 		}
 
 		for (let n in notes) { //notes
-			if (notes[n].beat - beat > 0)
+			if (notes[n].sec - sec > 0)
 				ctx.fillStyle = {
 					'M': '#ff0000',
 					'1': '#ffffff',
@@ -117,22 +117,18 @@ $('#startButton')[0].onclick = function () {
 	{
 		let CFRO = $('#chartFile')[0].files
 		chartFiles = {}
-		console.log(CFRO)
 		for (let i = 0; i < CFRO.length; i++) {
-			console.log(CFRO[i])
 			let x = CFRO[i].name.toLowerCase()
 			chartFiles[x] = CFRO[i]
 			chartFiles[x].name = x
 		}
 	}
-	console.log(chartFiles)
 	let sm
 	for (let i in chartFiles)
 		if (/.sm$/.exec(i)) {
 			if (sm) throw `2 .sm files, ${sm} & ${i}`
 			else sm = i
 		}
-	console.log(sm)
 
 	var reader = new FileReader()
 	reader.onload = ({ target: { result } }) => {
@@ -167,8 +163,6 @@ function parseSM(sm) {
 		let p = sm[i]
 		switch (p[0]) {
 			case '#MUSIC':
-				console.log(chartFiles)
-				console.log(p[1])
 				out.audio = new Audio(URL.createObjectURL(chartFiles[p[1].toLowerCase()]))
 				break
 			case '#OFFSET':
@@ -176,8 +170,8 @@ function parseSM(sm) {
 				break
 			case '#BPMS':
 				{
-					console.log(`#BPMS: ${p[1]}`)
-					bx = p[1].split(',') //shortform for bpmChanges
+					let bx = p[1].split(',') //shortform for bpmChanges
+					bx = bx.filter(i => /=/.exec(i))
 					for (let i in bx) {
 						let v = bx[i].split('=')
 						bx[i] = {
@@ -186,13 +180,12 @@ function parseSM(sm) {
 						}
 					}
 					bpmChanges = bpmChanges.concat(bx)
-					console.log(bx)
 				}
 				break
 			case '#STOPS':
 				{
-					console.log(`#STOPS: ${p[1]}`)
-					bx = p[1] ? p[1].split(',') : [] //shortform for bpmChanges
+					let bx = p[1].split(',') //shortform for bpmChanges
+					bx = bx.filter(i => /=/.exec(i))
 					for (let i in bx) {
 						let v = bx[i].split('=')
 						bx[i] = {
@@ -201,7 +194,6 @@ function parseSM(sm) {
 						}
 					}
 					stops = stops.concat(bx)
-					console.log(bx)
 					break
 				}
 			case '#NOTES':
@@ -211,7 +203,6 @@ function parseSM(sm) {
 				console.log(`Unrecognised sm property "${p[0]}"`)
 		}
 	}
-	console.log(bpmChanges)
 	{
 		let t = [[steps, '#NOTES'], [bpmChanges.length, '#BPMS']]
 		for (let i in t)
@@ -222,10 +213,10 @@ function parseSM(sm) {
 		if (bpmChanges[0].beat !== 0) throw `No starting bpm, first bpm change is ${bpmChanges[0]}`
 		bpmChanges.sort((a, b) => a.beat - b.beat)
 		bpmChanges[0].sec = 0
-		for (let i = 1; i < bpmChanges.length; i++)
+		for (let i = 1; i < bpmChanges.length; i++) {
 			bpmChanges[i].sec = beatToSec(bpmChanges[i].beat)
-		for (let i = 1; i < stops.length; i++)
-			stops[i].sec = beatToSec(stops[i].beat)
+			console.log(bpmChanges[i])
+		}
 		console.log(bpmChanges)
 		console.log(stops)
 	}
@@ -286,22 +277,25 @@ function getLastBpm(time, valueType) {
 }
 function secToBeat(sec) {
 	let b = getLastBpm(sec, 'sec')
-	/*let s = stops
-		.filter(({ sec: i }) => (i > b.sec) && (i < sec))
+	let s = stops
+		.filter(({ sec: i }) => (i >= b.sec) && (i < sec))
 		.map(i => i.len)
 	for (let i in s)
-		sec -= s[i]*/
+		sec -= s[i]
 	let x = ((sec - b.sec) * b.bpm / 60) + b.beat
 	return x
 }
 function beatToSec(beat) {
 	let b = getLastBpm(beat, 'beat')
 	let x = ((beat - b.beat) / b.bpm * 60) + b.sec
-	let s = stops
-		.filter(({ beat: i }) => (i > b.beat) && (i < beat))
-		.map(i => i.len)
-	for (let i in s)
+	let si = stops.filter(({ beat: i }) => (i >= b.beat) && (i < beat))
+	let s = si.map(i => i.len)
+	//console.log(si)
+	//console.log('before stops:', x)
+	for (let i in s) {
+		//console.log('stop being added:', s[i])
 		x += s[i]
+	}
 	return x
 }
 
