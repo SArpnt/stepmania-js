@@ -48,6 +48,15 @@ var draw
 		}
 
 		for (let n in notes) { //notes
+			/*({
+				4:'#ff0000',
+				8:'#0000ff',
+				12:'#8800ff',
+				16:'#00ff00',
+				24:'#8800ff',
+				32:'#ffff00',
+				64:'#00ffff',
+			}) */
 			if (notes[n].sec - sec > 0)
 				ctx.fillStyle = {
 					'M': '#ff0000',
