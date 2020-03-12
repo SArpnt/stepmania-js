@@ -68,7 +68,14 @@ var draw
 		}
 
 		$("#fps")[0].innerHTML = Math.round(1 / (sec - fpsC))
+		{
+			let bpmDis = $("#bpm")[0]
+			bpmDis.innerHTML = getLastBpm(sec, 'sec').bpm
+			let y = getLastStop(sec, 'sec')
+			bpmDis.style = `color:${(y.sec + y.len > sec) ? '#ff0000' : '#000000'}`
+		}
 		fpsC = sec
+
 		$("#sec")[0].innerHTML = sec
 		$("#beat")[0].innerHTML = beat
 		requestAnimationFrame(draw)
@@ -246,7 +253,7 @@ function parseSM(sm) {
 								i.beatEnd = b
 								i.beatLength = b - i.beat
 								i.secEnd = beatToSec(b)
-								i.secLength = beatToSec(b - i.beat)
+								i.secLength = beatToSec(b) - beatToSec(i.beat)
 							}
 							// add more hold end script
 							unfinHolds[c] = null
@@ -276,13 +283,17 @@ function parseSM(sm) {
 	return out
 }
 
+function getLastStop(time, valueType) {
+	return stops.find((e, i, a) => (i + 1 == a.length) || (a[i + 1][valueType] >= time))
+}
 function getLastBpm(time, valueType) {
 	return bpmChanges.find((e, i, a) => (i + 1 == a.length) || (a[i + 1][valueType] >= time))
 }
 function secToBeat(sec) {
 	let b = getLastBpm(sec, 'sec')
-	let si = stops.filter(({ sec: i }) => (i >= b.sec) && (i < sec))
-	let s = si.map(i => i.sec + i.len ? sec-i.sec : i.len)
+	let s = stops
+		.filter(({ sec: i }) => (i >= b.sec) && (i < sec))
+		.map(i => (i.sec + i.len > sec) ? (sec - i.sec) : i.len)
 	for (let i in s)
 		sec -= s[i]
 	return ((sec - b.sec) * b.bpm / 60) + b.beat
@@ -290,8 +301,9 @@ function secToBeat(sec) {
 function beatToSec(beat) {
 	let b = getLastBpm(beat, 'beat')
 	let x = ((beat - b.beat) / b.bpm * 60) + b.sec
-	let si = stops.filter(({ beat: i }) => (i >= b.beat) && (i < beat))
-	let s = si.map(i => i.len)
+	let s = stops
+		.filter(({ beat: i }) => (i >= b.beat) && (i < beat))
+		.map(i => i.len)
 	for (let i in s) {
 		x += s[i]
 	}
