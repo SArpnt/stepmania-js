@@ -1,5 +1,7 @@
 const canvas = $('#canvas')[0]
 const ctx = canvas.getContext('2d')
+const gl = canvas.getContext('webgl')
+if (gl === null) alert("Unable to initialize WebGL. Your browser or machine may not support it.");
 
 var startTime
 var step
@@ -10,13 +12,14 @@ var draw
 	var getSec = () => (performance.now() - startTime) / 1000
 
 	step = function () {
+		window.setTimeout(step, 0)
 		let now = getSec()
 		$('#tps')[0].innerHTML = Math.round(1 / (now - tpsC))
 		tpsC = now
-		window.setTimeout(step, 0)
 	}
 
 	draw = function (ms) {
+		requestAnimationFrame(draw)
 		let sec = getSec()
 		let beat = secToBeat(sec)
 		let size = 32 //temporary render variable
@@ -78,7 +81,6 @@ var draw
 
 		$("#sec")[0].innerHTML = sec
 		$("#beat")[0].innerHTML = beat
-		requestAnimationFrame(draw)
 	}
 }
 
