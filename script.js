@@ -1,36 +1,81 @@
-const canvas = $('#canvas')[0];
-const ctx = canvas.getContext('2d');
+"use strict";
+
+const canvas = document.getElementById('canvas'),
+	ctx = canvas.getContext('2d');
 //const gl = canvas.getContext('webgl')
-//if (gl === null) alert("Unable to initialize WebGL. Your browser or machine may not support it.");
+//if (!gl) alert("Unable to initialize WebGL. Your browser or machine may not support it.");
 
-var startTime;
-var step;
-var draw;
+function getLastStop(time, valueType) {
+	return stops.find((e, i, a) => (i + 1 == a.length) || (a[i + 1][valueType] >= time));
+}
+function getLastBpm(time, valueType) {
+	return bpmChanges.find((e, i, a) => (i + 1 == a.length) || (a[i + 1][valueType] >= time));
+}
+function secToBeat(sec) {
+	let b = getLastBpm(sec, 'sec');
+	let s = stops
+		.filter(({ sec: i }) => (i >= b.sec) && (i < sec))
+		.map(i => (i.sec + i.len > sec) ? (sec - i.sec) : i.len);
+	for (let i in s)
+		sec -= s[i];
+	return ((sec - b.sec) * b.bpm / 60) + b.beat;
+}
+function beatToSec(beat) {
+	let b = getLastBpm(beat, 'beat');
+	let x = ((beat - b.beat) / b.bpm * 60) + b.sec;
+	let s = stops
+		.filter(({ beat: i }) => (i >= b.beat) && (i < beat))
+		.map(i => i.len);
+	for (let i in s) {
+		x += s[i];
+	}
+	return x;
+}
 
+function startGame({ audio, offset }) {
+	if (audio) audio.play();
+	else console.warn(`No audio found`);
+	startTime = performance.now() - offset * 1000;
+	step();
+	requestAnimationFrame(draw);
+}
+
+let startTime,
+step,
+draw;
 {
-	var tpsC = 0;
-	var fpsC = 0;
-	var getSec = () => (performance.now() - startTime) / 1000;
+	const elems = {
+		bpm: document.getElementById('bpm'),
+		beat: document.getElementById('beat'),
+		sec: document.getElementById('sec'),
+		fps: document.getElementById('fps'),
+		tps: document.getElementById('tps'),
+	};
+	let
+		tpsC = 0,
+		fpsC = 0,
+		getSec = () => (performance.now() - startTime) / 1000;
 
 	step = function () {
 		window.setTimeout(step, 0);
 		let now = getSec();
-		$('#tps')[0].innerHTML = Math.round(1 / (now - tpsC));
+		elems.tps.innerHTML = Math.round(1 / (now - tpsC));
 		tpsC = now;
 	};
 
 	draw = function () {
 		requestAnimationFrame(draw);
-		let sec = getSec();
-		let beat = secToBeat(sec);
-		let size = 32; //temporary render variable
-		let xMod = 2; //temporary render variable
-		let cMod = 480 / 60; //temporary render variable
+		let
+			sec = getSec(),
+			beat = secToBeat(sec),
+			size = 32, //temporary render variable
+			xMod = 4, //temporary render variable
+			cMod = 480 / 60; //temporary render variable
 		ctx.fillStyle = "#000000";
-		ctx.fillRect(0, 0, 640, 480);//temporary background
+		ctx.fillRect(0, 0, 640, 480); //temporary background
 		ctx.fillStyle = "#666666";
 		for ( //bar lines
-			i = Math.ceil(beat / 4) * 4;
+			let i = Math.ceil(beat / 4) * 4;
 			i < (Math.ceil(beat / 4) + 8) * 4;
 			i += 4
 		) {
@@ -60,56 +105,56 @@ var draw;
 			192: '#00ffff',
 			def: '#888888',
 		};
-		for (let n in notes) { //notes
-			if (notes[n].sec - sec > 0)
+		function renderNote(note) { //notes
+			if (note.sec - sec > 0)
 				ctx.fillStyle = {
 					'M': _ => '#880000',
 					'1': function () {
-						let b = notes[n].beat;
+						let b = note.beat;
 
 						for (let t in noteTimings)
-							if (b % (4 / t) < 1e-4)
+							if ((b + 1e-4) % (4 / t) < 1e-4)
 								return noteTimings[t];
 
 						return noteTimings.def;
 					},
 					'2': _ => '#00ffff',
 					'4': _ => '#00ff00',
-				}[notes[n].type]();
+				}[note.type]();
 			else
 				ctx.fillStyle = '#ff00ff';
 
 			ctx.fillRect(
-				notes[n].column * size,
-				(notes[n].beat - beat) * xMod * size,
+				note.column * size,
+				(note.beat - beat) * xMod * size,
 				size,
-				(notes[n].beatLength * xMod * size || 0) + size);
+				(note.beatLength * xMod * size || 0) + size);
 			ctx.fillRect(
-				(5 + notes[n].column) * size,
-				(notes[n].sec - sec) * cMod * size,
+				(5 + note.column) * size,
+				(note.sec - sec) * cMod * size,
 				size,
-				(notes[n].secLength * cMod * size || 0) + size
+				(note.secLength * cMod * size || 0) + size
 			);
 		}
+		notes.forEach(renderNote);
 
-		$("#fps")[0].innerHTML = Math.round(1 / (sec - fpsC));
+		elems.fps.innerHTML = Math.round(1 / (sec - fpsC));
 		{
-			let bpmDis = $("#bpm")[0];
-			bpmDis.innerHTML = getLastBpm(sec, 'sec').bpm;
+			elems.bpm.innerHTML = getLastBpm(sec, 'sec').bpm;
 			let y = getLastStop(sec, 'sec');
-			bpmDis.style = `color:${y && (y.sec + y.len > sec) ? '#ff0000' : '#000000'}`;
+			elems.bpm.style = `color:${y && (y.sec + y.len > sec) ? '#ff0000' : '#000000'}`;
 		}
 		fpsC = sec;
 
-		$("#sec")[0].innerHTML = sec;
-		$("#beat")[0].innerHTML = beat;
+		elems.sec.innerHTML = sec;
+		elems.beat.innerHTML = beat;
 	};
 }
 
 addEventListener("keydown", press(true));
 addEventListener("keyup", press(false));
 
-var keyInput = [
+let keyInput = [
 	{
 		up: false,
 		down: false,
@@ -139,43 +184,13 @@ function press(v) {
 	};
 }
 
-var bpmChanges;
-var stops;
-var notes = [];
-var chartFiles;
+let bpmChanges,
+	stops,
+	notes = [],
+	chartFiles;
 {
-	$('#startButton')[0].onclick = function () {
-		this.disabled = true;
-		{
-			let CFRO = $('#chartFile')[0].files;
-			chartFiles = {};
-			for (let i = 0; i < CFRO.length; i++) {
-				let x = CFRO[i].name.toLowerCase();
-				chartFiles[x] = CFRO[i];
-				chartFiles[x].name = x;
-			}
-		}
-		let sm;
-		for (let i in chartFiles)
-			if (/.sm$/.exec(i)) {
-				if (sm) throw `2 .sm files, ${sm} & ${i}`;
-				else sm = i;
-			}
-
-		var reader = new FileReader();
-		reader.onload = ({ target: { result } }) => {
-			let data = parseSM(result);
-			let sG;
-			sG = function () {
-				data.audio.removeEventListener('canplaythrough', sG);
-				startGame(data);
-			};
-			data.audio.addEventListener('canplaythrough', sG);
-		};
-		reader.readAsText(chartFiles[sm]);
-	};
 	function parseSM(sm) {
-		var out = {};
+		let out = {};
 		sm = sm.replace(/\/\/.*/g, '')
 			.replace(/\r?\n|\r/g, '')
 			.split(';');
@@ -188,7 +203,7 @@ var chartFiles;
 			else
 				sm.splice(i, 1);
 		}
-		var steps = [];
+		let steps = [];
 		bpmChanges = [];
 		stops = [];
 		for (let i in sm) {
@@ -202,7 +217,7 @@ var chartFiles;
 					break;
 				case '#BPMS':
 					{
-						let bx = p[1].split(','); //shortform for bpmChanges
+						let bx = p[1].split(','); // bpm list
 						bx = bx.filter(i => /=/.exec(i));
 						for (let i in bx) {
 							let v = bx[i].split('=');
@@ -216,8 +231,8 @@ var chartFiles;
 					break;
 				case '#STOPS':
 					{
-						let bx = p[1].split(','); //shortform for bpmChanges
-						bx = bx.filter(i => /=/.exec(i));
+						let bx = p[1].split(','); // stop list
+						bx = bx.filter(i => i.includes('='));
 						for (let i in bx) {
 							let v = bx[i].split('=');
 							bx[i] = {
@@ -229,10 +244,11 @@ var chartFiles;
 						break;
 					}
 				case '#NOTES':
-					if (p[3] == $('#difficulty')[0].value) steps = p[6].split(',');
+					if (p[3] == document.getElementById('difficulty').value)
+						steps = p[6].split(',');
 					break;
 				default:
-					console.log(`Unrecognised sm property "${p[0]}"`);
+					console.debug(`Unrecognised sm property "${p[0]}"`);
 			}
 		}
 		{
@@ -303,41 +319,35 @@ var chartFiles;
 		}
 		return out;
 	}
-
-	function getLastStop(time, valueType) {
-		return stops.find((e, i, a) => (i + 1 == a.length) || (a[i + 1][valueType] >= time));
-	}
-	function getLastBpm(time, valueType) {
-		return bpmChanges.find((e, i, a) => (i + 1 == a.length) || (a[i + 1][valueType] >= time));
-	}
-	function secToBeat(sec) {
-		let b = getLastBpm(sec, 'sec');
-		let s = stops
-			.filter(({ sec: i }) => (i >= b.sec) && (i < sec))
-			.map(i => (i.sec + i.len > sec) ? (sec - i.sec) : i.len);
-		for (let i in s)
-			sec -= s[i];
-		return ((sec - b.sec) * b.bpm / 60) + b.beat;
-	}
-	function beatToSec(beat) {
-		let b = getLastBpm(beat, 'beat');
-		let x = ((beat - b.beat) / b.bpm * 60) + b.sec;
-		let s = stops
-			.filter(({ beat: i }) => (i >= b.beat) && (i < beat))
-			.map(i => i.len);
-		for (let i in s) {
-			x += s[i];
+	document.getElementById('startButton').onclick = function () {
+		this.disabled = true;
+		{
+			let CFRO = document.getElementById('chartFile').files;
+			chartFiles = {};
+			for (let i = 0; i < CFRO.length; i++) {
+				let x = CFRO[i].name.toLowerCase();
+				chartFiles[x] = CFRO[i];
+			}
 		}
-		return x;
-	}
+		let sm;
+		for (let i in chartFiles)
+			if (/.sm$/.exec(i)) {
+				if (sm) throw `2 .sm files, ${sm} & ${i}`;
+				else sm = i;
+			}
 
-	function startGame({ audio, offset }) {
-		if (audio) audio.play();
-		else console.log('No audio found');
-		startTime = performance.now() - offset * 1000;
-		step();
-		requestAnimationFrame(draw);
-	}
+		let reader = new FileReader();
+		reader.onload = ({ target: { result } }) => {
+			let data = parseSM(result);
+			let sG;
+			sG = function () {
+				data.audio.removeEventListener('canplaythrough', sG);
+				startGame(data);
+			};
+			data.audio.addEventListener('canplaythrough', sG);
+		};
+		reader.readAsText(chartFiles[sm]);
+	};
 }
 ctx.fillStyle = "grey";
 ctx.fillRect(0, 0, 640, 480);
